@@ -10,6 +10,8 @@ func userRoutes(rg *gin.RouterGroup){
 	users :=  rg.Group("/users")
 
 	users.GET("", func(c * gin.Context){
-		c.JSON(http.StatusOK, "users")
+		c.JSON(http.StatusOK, gin.H{
+			"message": "users",
+	})
 	})
 }

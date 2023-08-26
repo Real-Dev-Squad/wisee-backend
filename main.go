@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	address := flag.String("address", ":8080", "server address to listen on")
+	port := flag.String("port", ":8080", "server address to listen on")
 	flag.Parse()
 
-	routes.Listen(*address)
+	routes.Listen(*port)
 }
