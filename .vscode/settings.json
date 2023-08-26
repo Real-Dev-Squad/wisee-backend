@@ -1,0 +1,53 @@
+{
+  /**
+    Editor rules
+    ------------
+  */
+  "editor.formatOnSave": true,
+  "editor.tabSize": 4,
+  "prettier.tabWidth": 4,
+  "prettier.printWidth": 120,
+  "editor.rulers": [
+    {
+      "column": 120
+    }
+  ],
+  /**
+    Formatters
+    ------------
+  */
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  /**
+    New Lines
+    ------------
+  */
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  /**
+    Linting
+    ------------
+  */
+  "eslint.run": "onSave",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  /**
+    Miscelaneous
+    ------------
+  */
+  "typescript.tsdk": "node_modules/typescript/lib",
+  /**
+    TailwindCSS
+    ------------
+  */
+  "tailwindCSS.experimental.classRegex": [
+    [
+      "cva\\(([^)]*)\\)",
+      "[\"'`]([^\"'`]*).*?[\"'`]"
+    ],
+    [
+      "cx\\(([^)]*)\\)",
+      "(?:'|\"|`)([^']*)(?:'|\"|`)"
+    ]
+  ]
+}
