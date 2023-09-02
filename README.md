@@ -6,21 +6,30 @@ To setup this GO project you need to install the following tools:
 
 -   [Go](https://golang.org/dl/)
 -   [Air](https://github.com/cosmtrek/air)
+-   [PostgreSQL](https://www.postgresql.org/download/)
 
-### Development
+### Development Setup
 
-To Start the development server run the following command:
+1. To Start the development server run the following command:
 
-```bash
-air
-```
+    ```bash
+    air
+    ```
 
-Air will start a development server on `port 8080` and create a development build in `tmp` folder.
-To change the port run the following command:
+    Air will start a development server on `port 8080` and create a development build in `tmp` folder.
+    To change the port run the following command:
 
-```bash
-air -- --port :<port> # replace <port> with the port number
-```
+    ```bash
+    air -- --port :<port> # replace <port> with the port number
+    ```
+
+2. Create a `.env` using a env file from `environments` folder.
+
+    ```bash
+    cp environments/.env.development .env
+    ```
+
+    > **Note:** You can also create a `.env` file manually and copy the content from `.env.example` file.
 
 ### Build
 
