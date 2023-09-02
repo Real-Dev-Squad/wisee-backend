@@ -23,4 +23,7 @@
   */
   "files.eol": "\n",
   "files.insertFinalNewline": true,
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  },
 }
