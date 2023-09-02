@@ -45,6 +45,12 @@ This will create a binary file in the `build` folder.
 
 ```bash
 ├── build
+├── models                # All models
+├── environments          # All env files
+    ├── .env.development
+    ├── .env.production
+    ├── .env.test
+    ├── .env.example
 ├── routes                # All routes
     ├── main.go
     ├── <route group>     # A route group example: users
