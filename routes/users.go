@@ -24,7 +24,8 @@ func userRoutes(rg *gin.RouterGroup, db *bun.DB) {
 		}
 
 		ctx.JSON(http.StatusOK, gin.H{
-			"message": users,
+			"message": "users fetched successfully",
+			"data":    users,
 		})
 	})
 }
