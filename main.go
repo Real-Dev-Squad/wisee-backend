@@ -44,5 +44,5 @@ func main() {
 	port := flag.String("port", ":8080", "server address to listen on")
 	flag.Parse()
 
-	routes.Listen(*port, db)
+	routes.Listen("127.0.0.1"+*port, db)
 }
