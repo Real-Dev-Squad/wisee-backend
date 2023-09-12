@@ -7,6 +7,7 @@ To setup this GO project you need to install the following tools:
 -   [Go](https://golang.org/dl/)
 -   [Air](https://github.com/cosmtrek/air)
 -   [PostgreSQL](https://www.postgresql.org/download/)
+-   [Golang Migrate - CLI](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate)
 
 ### Development Setup
 
@@ -31,6 +32,15 @@ To setup this GO project you need to install the following tools:
 
     > **Note:** You can also create a `.env` file manually and copy the content from `.env.example` file.
 
+3. Create a database in PostgreSQL and update the database url in `.env` file.
+4. Run the following command to run the migrations:
+
+    ```bash
+    migrate -path ./migrations -database <database_url> up
+    ```
+
+    > **Note:** Replace `<database_url>` with the database url from `.env` file.
+
 ### Build
 
 Build the app for production run the following command:
@@ -41,11 +51,16 @@ go build -o ./build/
 
 This will create a binary file in the `build` folder.
 
+### Migrations
+
+Migrations are handled using [golang-migrate](https://github.com/golang-migrate/migrate), read the [docs](https://github.com/golang-migrate/migrate/blob/master/database/postgres/TUTORIAL.md) for more info.
+
 ## Folder Structure
 
 ```bash
 ├── build
 ├── models                # All models
+├── migrations            # Database migrations
 ├── environments          # All env files
     ├── .env.development
     ├── .env.production
