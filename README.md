@@ -60,6 +60,7 @@ Migrations are handled using [golang-migrate](https://github.com/golang-migrate/
 ```bash
 ├── build
 ├── models                # All models
+├── migrations            # Database migrations
 ├── environments          # All env files
     ├── .env.development
     ├── .env.production
