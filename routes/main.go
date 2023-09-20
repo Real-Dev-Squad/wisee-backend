@@ -10,6 +10,7 @@ func SetupV1Routes(db *bun.DB) *gin.Engine {
 
 	v1 := router.Group("v1/")
 	userRoutes(v1, db)
+	authRoutes(v1, db)
 
 	return router
 }
