@@ -8,7 +8,7 @@ import (
 	"github.com/uptrace/bun"
 )
 
-func userRoutes(rg *gin.RouterGroup, db *bun.DB) {
+func UserRoutes(rg *gin.RouterGroup, db *bun.DB) {
 	users := rg.Group("/users")
 
 	users.GET("", func(ctx *gin.Context) {

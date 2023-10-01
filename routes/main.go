@@ -1,18 +1,25 @@
 package routes
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 )
 
-var router = gin.Default()
+func SetupV1Routes(db *bun.DB) *gin.Engine {
+	var router = gin.Default()
 
-func setupV1Routes(db *bun.DB) {
 	v1 := router.Group("v1/")
-	userRoutes(v1, db)
+	UserRoutes(v1, db)
+	AuthRoutes(v1, db)
+
+	return router
 }
 
 func Listen(listenAddress string, db *bun.DB) {
-	setupV1Routes(db)
+	router := SetupV1Routes(db)
+
+	// TODO: Configure CORS properly to allow only access from certain origins
+	router.Use(cors.Default())
 	router.Run(listenAddress)
 }
