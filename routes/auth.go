@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/Real-Dev-Squad/wisee-backend/models"
+	"github.com/Real-Dev-Squad/wisee-backend/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 	"golang.org/x/oauth2"
@@ -39,8 +40,8 @@ func getUserInfoFromCode(code string, conf *oauth2.Config, ctx *gin.Context) *oa
 
 func AuthRoutes(reg *gin.RouterGroup, db *bun.DB) {
 	auth := reg.Group("/auth")
-
 	googleAuth := auth.Group("/google")
+
 	conf := &oauth2.Config{
 		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
 		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
@@ -61,48 +62,42 @@ func AuthRoutes(reg *gin.RouterGroup, db *bun.DB) {
 
 	googleAuth.GET(("/callback"), func(ctx *gin.Context) {
 		code := ctx.Query("code")
-		googleAccountInfo := getUserInfoFromCode(code, conf, ctx)
+		domain := os.Getenv("DOMAIN")
+		authRedirectUrl := os.Getenv("AUTH_REDIRECT_URL")
 
 		user := new(models.User)
+		googleAccountInfo := getUserInfoFromCode(code, conf, ctx)
 
 		count, _ := db.NewSelect().Model(user).Where("email = ?", googleAccountInfo.Email).ScanAndCount(ctx)
 
-		if count != 0 {
-			// create a auth token
+		if count == 0 {
+			newUser := &models.User{
+				Username: googleAccountInfo.Name,
+				Email:    googleAccountInfo.Email,
+			}
 
-			// set cookies here
-			ctx.SetCookie("email", googleAccountInfo.Email, 3600, "/", "localhost", false, true)
-			ctx.SetCookie("username", googleAccountInfo.Name, 3600, "/", "localhost", false, true)
+			// create an account
+			_, err := db.NewInsert().Model(newUser).Exec(ctx)
 
-			// redirect user to dashboard
-			ctx.Redirect(302, "http://localhost:3000/dashboard")
-
-			return
+			if err != nil {
+				log.Fatal(err)
+				ctx.JSON(500, gin.H{
+					"message": "error",
+				})
+			}
 		}
 
-		newUser := &models.User{
-			Username: googleAccountInfo.Name,
-			Email:    googleAccountInfo.Email,
-		}
-
-		// create account
-		_, err := db.NewInsert().Model(newUser).Exec(ctx)
+		token, err := utils.GenerateToken(user)
 
 		if err != nil {
-			// log.Fatal(err)
+			log.Fatal(err)
 			ctx.JSON(500, gin.H{
 				"message": "error",
 			})
 		}
 
-		// create token
-
-		// set cookie
-		ctx.SetCookie("email", googleAccountInfo.Email, 3600, "/", "localhost", false, true)
-		ctx.SetCookie("username", googleAccountInfo.Name, 3600, "/", "localhost", false, true)
-
-		// redirect
-		ctx.JSON(302, "http://localhost:3000/onboarding")
-
+		// set cookie and redirect
+		ctx.SetCookie("token", token, 3600, "/", domain, true, true)
+		ctx.Redirect(302, authRedirectUrl)
 	})
 }
