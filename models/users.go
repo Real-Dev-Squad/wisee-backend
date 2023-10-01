@@ -11,7 +11,7 @@ type User struct {
 
 	Id           int64     `bun:"id,pk,autoincrement"`
 	Username     string    `bun:"username,notnull"`
-	Email        string    `bun:"email,notnull"`
+	Email        string    `bun:"email,unique,notnull"`
 	Password     string    `bun:"password"`
 	IsVerified   bool      `bun:"is_verified,default:false"`
 	IsOnboarding bool      `bun:"is_onboarding,default:true"`
