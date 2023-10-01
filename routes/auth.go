@@ -16,26 +16,26 @@ import (
 	"google.golang.org/api/option"
 )
 
-func getUserInfoFromCode(code string, conf *oauth2.Config, ctx *gin.Context) *oauth2Api.Userinfo {
-	tok, err := conf.Exchange(context.TODO(), code)
+func getUserInfoFromCode(code string, conf *oauth2.Config, ctx *gin.Context) (*oauth2Api.Userinfo, error) {
+	tok, exchangeErr := conf.Exchange(context.TODO(), code)
 
-	if err != nil {
-		log.Fatal(err)
+	if exchangeErr != nil {
+		return nil, exchangeErr
 	}
 
-	oauth2Service, err := oauth2Api.NewService(ctx, option.WithTokenSource(conf.TokenSource(ctx, tok)))
+	oauth2Service, serviceError := oauth2Api.NewService(ctx, option.WithTokenSource(conf.TokenSource(ctx, tok)))
 
-	if err != nil {
-		log.Fatal(err)
+	if serviceError != nil {
+		return nil, serviceError
 	}
 
-	userInfo, err := oauth2Service.Userinfo.Get().Context(ctx).Do()
+	userInfo, getInfoError := oauth2Service.Userinfo.Get().Context(ctx).Do()
 
-	if err != nil {
-		log.Fatal(err)
+	if getInfoError != nil {
+		return nil, getInfoError
 	}
 
-	return userInfo
+	return userInfo, nil
 }
 
 func AuthRoutes(reg *gin.RouterGroup, db *bun.DB) {
@@ -66,17 +66,24 @@ func AuthRoutes(reg *gin.RouterGroup, db *bun.DB) {
 		authRedirectUrl := os.Getenv("AUTH_REDIRECT_URL")
 
 		user := new(models.User)
-		googleAccountInfo := getUserInfoFromCode(code, conf, ctx)
+		googleAccountInfo, getInfoError := getUserInfoFromCode(code, conf, ctx)
+
+		if getInfoError != nil {
+			log.Fatal(getInfoError)
+			ctx.JSON(500, gin.H{
+				"message": "error",
+			})
+		}
 
 		count, _ := db.NewSelect().Model(user).Where("email = ?", googleAccountInfo.Email).ScanAndCount(ctx)
 
+		// User does not exist, create a new user
 		if count == 0 {
 			newUser := &models.User{
 				Username: googleAccountInfo.Name,
 				Email:    googleAccountInfo.Email,
 			}
 
-			// create an account
 			_, err := db.NewInsert().Model(newUser).Exec(ctx)
 
 			if err != nil {

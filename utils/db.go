@@ -2,6 +2,8 @@ package utils
 
 import (
 	"database/sql"
+	"os"
+	"strconv"
 
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
@@ -10,9 +12,16 @@ import (
 )
 
 func SetupDBConnection(dsn string) *bun.DB {
+	maxOpenConnectionsStr := os.Getenv("DB_MAX_OPEN_CONNECTIONS")
+	maxOpenConnections, err := strconv.Atoi(maxOpenConnectionsStr)
+
+	if err != nil {
+		panic(err)
+	}
+
 	pgDB := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dsn)))
 
-	pgDB.SetMaxOpenConns(1)
+	pgDB.SetMaxOpenConns(maxOpenConnections)
 
 	db := bun.NewDB(pgDB, pgdialect.New())
 

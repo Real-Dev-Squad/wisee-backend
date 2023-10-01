@@ -18,9 +18,9 @@ func TestMain(m *testing.M) {
 	dsn := os.Getenv("TEST_DB_URL")
 	db = utils.SetupDBConnection(dsn)
 
-	code := m.Run()
+	defer db.Close()
 
-	db.Close()
+	code := m.Run()
 
 	os.Exit(code)
 }
