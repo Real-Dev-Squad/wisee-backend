@@ -23,7 +23,7 @@ func GenerateToken(user *models.User) (string, error) {
 		return "", err
 	}
 
-	tokenExpiryTime := time.Now().Add(time.Second * time.Duration(tokenValidityInHours)).UTC().Format(time.RFC3339Nano)
+	tokenExpiryTime := time.Now().Add(time.Second * time.Duration(tokenValidityInHours)).UTC().Format(time.RFC3339)
 
 	t := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
 		"iss":   issuer,
@@ -57,7 +57,7 @@ func VerifyToken(tokenString string) (string, error) {
 		claims = c
 	}
 
-	expiryTime, err := time.Parse(time.RFC3339Nano, claims["exp"].(string))
+	expiryTime, err := time.Parse(time.RFC3339, claims["exp"].(string))
 
 	if err != nil {
 		return "", err
