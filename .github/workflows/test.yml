@@ -1,0 +1,29 @@
+name: Test
+
+on:
+    pull_request:
+        branches: ["*"]
+
+jobs:
+    unit-tests:
+        runs-on: ubuntu-latest
+
+        name: Run tests
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Go
+              uses: actions/setup-go@v4
+              with:
+                  go-version-file: "./go.mod"
+
+            - run: go version
+
+            - name: Copy Env
+              run: cp ./environments/dev.env .env
+
+            - name: Run Unit tests
+              run: go test ./tests/unit
