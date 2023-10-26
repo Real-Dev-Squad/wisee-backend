@@ -5,7 +5,7 @@ on:
         branches: ["*"]
 
 jobs:
-    unit-and-tests:
+    unit-tests:
         runs-on: ubuntu-latest
 
         name: Run tests
