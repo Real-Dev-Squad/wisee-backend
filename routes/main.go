@@ -9,7 +9,7 @@ import (
 func SetupV1Routes(db *bun.DB) *gin.Engine {
 	var router = gin.Default()
 
-	router.GET("/health-check", func(ctx *gin.Context) {
+	router.GET("/health", func(ctx *gin.Context) {
 		HealthRoute(ctx, db)
 	})
 
