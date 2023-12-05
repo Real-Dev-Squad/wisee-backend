@@ -9,6 +9,10 @@ import (
 func SetupV1Routes(db *bun.DB) *gin.Engine {
 	var router = gin.Default()
 
+	router.GET("/health-check", func(ctx *gin.Context) {
+		HealthRoute(ctx, db)
+	})
+
 	v1 := router.Group("v1/")
 	UserRoutes(v1, db)
 	AuthRoutes(v1, db)
