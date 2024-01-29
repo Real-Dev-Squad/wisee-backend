@@ -1,9 +1,15 @@
 package dtos
 
-type ResponseDto struct {
+type ErrorResponse struct {
+	Code    int         `json:"code"`
 	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
-	Error   interface{} `json:"error"`
+	Detail  interface{} `json:"detail"`
+}
+
+type ResponseDto struct {
+	Message string        `json:"message"`
+	Data    interface{}   `json:"data"`
+	Error   ErrorResponse `json:"error"`
 }
 
 type CreateUpdateFormResponseDto struct {
