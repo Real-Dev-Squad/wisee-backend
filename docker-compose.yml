@@ -1,0 +1,19 @@
+name: "wisee-backend"
+
+services:
+    wisee-DB:
+        image: postgres:latest
+        ports:
+            - "7856:5432"
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: wisee
+    wisee-DB-test:
+        image: postgres:latest
+        ports:
+            - "7857:5432"
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: wisee_test

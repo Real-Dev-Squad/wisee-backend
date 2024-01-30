@@ -10,7 +10,7 @@ type CreateUpdateQuestionRequestDto struct {
 	FormId     int64  `json:"formId"`
 	Title      string `json:"title"`
 	Type       string `json:"type"`
-	isRequired bool   `json:"isRequired"`
+	IsRequired bool   `json:"isRequired"`
 	QuestionId int64  `json:"questionId"`
 }
 
