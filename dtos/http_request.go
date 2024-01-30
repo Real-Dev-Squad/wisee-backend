@@ -6,18 +6,14 @@ type CreateUpdateFormRequestDto struct {
 	UserId                int64  `json:"userId"`
 }
 
-// use for creating/updating question
 type CreateUpdateQuestionRequestDto struct {
-	FormId int64  `json:"formId"`
-	Title  string `json:"title"`
-	Type   string `json:"type"`
-	// Points                  int    `json:"points"`
-	isRequired bool  `json:"isRequired"`
-	QuestionId int64 `json:"questionId"`
-	// IsPartialMarkingEnabled bool   `json:"isPartialMarkingEnabled"`
+	FormId     int64  `json:"formId"`
+	Title      string `json:"title"`
+	Type       string `json:"type"`
+	isRequired bool   `json:"isRequired"`
+	QuestionId int64  `json:"questionId"`
 }
 
-// use for creating/updating option
 type CreateUpdateOptionRequestDto struct {
 	QuestionId int64  `json:"questionId"`
 	Value      string `json:"value"`

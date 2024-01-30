@@ -25,7 +25,6 @@ type CreateUpdateQuestionResponseDto struct {
 	Title      string `json:"title"`
 }
 
-// use for creating/updating option
 type CreateUpdateOptionResponseDto struct {
 	OptionId   int64  `json:"optionId"`
 	QuestionId int64  `json:"questionId"`
