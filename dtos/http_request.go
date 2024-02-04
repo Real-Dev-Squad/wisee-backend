@@ -1,21 +1,13 @@
 package dtos
 
 type CreateUpdateFormRequestDto struct {
-	Title                 string `json:"title"`
-	SendEmailOnSubmission bool   `json:"sendEmailOnSubmission"`
-	UserId                int64  `json:"userId"`
+	Status  string  `json:"status"`
+	Content []Block `json:"content"`
+	OwnerId int64   `json:"ownerId"`
 }
 
-type CreateUpdateQuestionRequestDto struct {
-	FormId     int64  `json:"formId"`
-	Title      string `json:"title"`
-	Type       string `json:"type"`
-	IsRequired bool   `json:"isRequired"`
-	QuestionId int64  `json:"questionId"`
-}
-
-type CreateUpdateOptionRequestDto struct {
-	QuestionId int64  `json:"questionId"`
-	Value      string `json:"value"`
-	OptionId   int64  `json:"optionId"`
+type CreateFormRequestDto struct {
+	Content      []Block `json:"content"`
+	ResponseById int64   `json:"responseById"`
+	FormId       int64   `json:"formId"`
 }

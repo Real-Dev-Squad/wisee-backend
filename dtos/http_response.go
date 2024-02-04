@@ -13,20 +13,27 @@ type ResponseDto struct {
 }
 
 type CreateUpdateFormResponseDto struct {
-	FormId                int64  `json:"formId"`
-	SendEmailOnSubmission bool   `json:"sendEmailOnSubmission"`
-	Title                 string `json:"title"`
+	ID          int64   `json:"id"`
+	Content     []Block `json:"content"`
+	OwnerId     int64   `json:"ownerId"`
+	CreatedByID int64   `json:"createdById"`
+	Status      string  `json:"status"`
+	CreatedAt   string  `json:"createdAt"`
+	UpdatedAt   string  `json:"updatedAt"`
 }
 
-type CreateUpdateQuestionResponseDto struct {
-	QuestionId int64  `json:"questionId"`
-	FormId     int64  `json:"formId"`
-	Type       string `json:"type"`
-	Title      string `json:"title"`
+type GetFormMetaDataResponseDto struct {
+	FormID              int64  `json:"formId"`
+	AcceptingResponses  bool   `json:"acceptingResponses"`
+	AllowGuestResponses bool   `json:"allowGuestResponses"`
+	CreatedAt           string `json:"createdAt"`
+	UpdatedAt           string `json:"updatedAt"`
 }
 
-type CreateUpdateOptionResponseDto struct {
-	OptionId   int64  `json:"optionId"`
-	QuestionId int64  `json:"questionId"`
-	Value      string `json:"value"`
+type CreateFormResponseDto struct {
+	Content      []Block `json:"content"`
+	ResponseById int64   `json:"responseById"`
+	FormId       int64   `json:"formId"`
+	CreatedAt    string  `json:"createdAt"`
+	UpdatedAt    string  `json:"updatedAt"`
 }
