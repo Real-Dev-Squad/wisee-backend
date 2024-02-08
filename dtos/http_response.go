@@ -13,17 +13,18 @@ type ResponseDto struct {
 }
 
 type CreateUpdateFormResponseDto struct {
-	ID          int64   `json:"id"`
-	Content     []Block `json:"content"`
-	OwnerId     int64   `json:"ownerId"`
-	CreatedByID int64   `json:"createdById"`
-	Status      string  `json:"status"`
-	CreatedAt   string  `json:"createdAt"`
-	UpdatedAt   string  `json:"updatedAt"`
+	ID            int64   `json:"id"`
+	Content       []Block `json:"content"`
+	OwnerId       int64   `json:"ownerId"`
+	CreatedById   int64   `json:"createdById"`
+	Status        string  `json:"status"`
+	CreatedAt     string  `json:"createdAt"`
+	UpdatedAt     string  `json:"updatedAt"`
+	PerformedById int64   `json:"performedById"`
 }
 
 type GetFormMetaDataResponseDto struct {
-	FormID              int64  `json:"formId"`
+	FormId              int64  `json:"formId"`
 	AcceptingResponses  bool   `json:"acceptingResponses"`
 	AllowGuestResponses bool   `json:"allowGuestResponses"`
 	CreatedAt           string `json:"createdAt"`
