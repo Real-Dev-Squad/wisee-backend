@@ -6,7 +6,7 @@ type CreateUpdateFormRequestDto struct {
 	OwnerId int64   `json:"ownerId"`
 }
 
-type CreateFormRequestDto struct {
+type CreateFormSubmissionRequestDto struct {
 	Content      []Block `json:"content"`
 	ResponseById int64   `json:"responseById"`
 	FormId       int64   `json:"formId"`
