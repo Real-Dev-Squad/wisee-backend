@@ -18,23 +18,11 @@ type CreateUpdateFormResponseDto struct {
 	OwnerId       int64   `json:"ownerId"`
 	CreatedById   int64   `json:"createdById"`
 	Status        string  `json:"status"`
-	CreatedAt     string  `json:"createdAt"`
-	UpdatedAt     string  `json:"updatedAt"`
 	PerformedById int64   `json:"performedById"`
 }
 
 type GetFormMetaDataResponseDto struct {
-	FormId              int64  `json:"formId"`
-	AcceptingResponses  bool   `json:"acceptingResponses"`
-	AllowGuestResponses bool   `json:"allowGuestResponses"`
-	CreatedAt           string `json:"createdAt"`
-	UpdatedAt           string `json:"updatedAt"`
-}
-
-type CreateFormResponseDto struct {
-	Content      []Block `json:"content"`
-	ResponseById int64   `json:"responseById"`
-	FormId       int64   `json:"formId"`
-	CreatedAt    string  `json:"createdAt"`
-	UpdatedAt    string  `json:"updatedAt"`
+	FormId              int64 `json:"formId"`
+	AcceptingResponses  bool  `json:"acceptingResponses"`
+	AllowGuestResponses bool  `json:"allowGuestResponses"`
 }
