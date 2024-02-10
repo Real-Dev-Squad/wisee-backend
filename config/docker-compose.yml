@@ -5,10 +5,9 @@ services:
     postgres:
         build: .
         container_name: my_postgres
-        restart: unless-stopped
         environment:
             POSTGRES_DB: wisee_db
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: wisee_password
         ports:
-            - "5432:5432"
+            - "5480:5432"
