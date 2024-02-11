@@ -13,6 +13,12 @@ func SetupV1Routes(db *bun.DB) *gin.Engine {
 	UserRoutes(v1, db)
 	AuthRoutes(v1, db)
 
+	router.GET("/health", func(ctx *gin.Context) {
+		ctx.JSON(200, gin.H{
+			"message": "OK",
+		})
+	})
+
 	return router
 }
 

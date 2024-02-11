@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Real-Dev-Squad/wisee-backend/models"
+	"github.com/Real-Dev-Squad/wisee-backend/src/models"
 	"github.com/golang-jwt/jwt/v5"
 )
 
