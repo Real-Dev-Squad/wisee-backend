@@ -12,7 +12,7 @@ CREATE TABLE forms (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE form_metas (
+CREATE TABLE form_metadatas (
     id SERIAL PRIMARY KEY,
     form_id INT NOT NULL,
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
@@ -45,10 +45,10 @@ ADD CONSTRAINT fk_forms_users_owner
 FOREIGN KEY (owner_id) 
 REFERENCES users(id);
 
-ALTER TABLE form_metas
-ADD CONSTRAINT fk_form_metas_form
+ALTER TABLE form_metadatas
+ADD CONSTRAINT fk_form_metadatas_form
 FOREIGN KEY (form_id) 
-REFERENCES form(id);
+REFERENCES forms(id);
 
 ALTER TABLE form_responses
 ADD CONSTRAINT fk_form_responses_users
@@ -58,6 +58,6 @@ REFERENCES users(id);
 ALTER TABLE form_responses
 ADD CONSTRAINT fk_form_responses_form
 FOREIGN KEY (form_id) 
-REFERENCES form(id);
+REFERENCES forms(id);
 
 COMMIT;
