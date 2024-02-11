@@ -33,6 +33,14 @@ To setup this GO project you need to install the following tools:
     > **Note:** You can also create a `.env` file manually and copy the content from `.env.example` file.
 
 3. Create a database in PostgreSQL and update the database url in `.env` file.
+    - To setup postgresql instance with Docker run the following command.
+        ```
+        docker-compose -f config/docker-compose.yml up
+        ```
+    - To run docker in background add `-d` flag
+        ```
+        docker-compose -f config/docker-compose.yml up -d
+        ```
 4. Run the following command to run the migrations:
 
     ```bash

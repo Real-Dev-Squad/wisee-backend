@@ -1,9 +1,11 @@
 package tests
 
 import (
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"os/exec"
 	"testing"
 
 	"github.com/Real-Dev-Squad/wisee-backend/routes"
@@ -18,10 +20,24 @@ func TestMain(m *testing.M) {
 	dsn := os.Getenv("TEST_DB_URL")
 	db = utils.SetupDBConnection(dsn)
 
+	migration_cmd := exec.Command("migrate", "-path", "../../migrations", "-database", dsn, "up") // run migrations
+	// Execute the migrations
+	_, err := migration_cmd.Output()
+	if err != nil {
+		log.Fatal("Error executing command:", err)
+		return
+	}
 	defer db.Close()
 
 	code := m.Run()
 
+	migration_down_cmd := exec.Command("migrate", "-path", "../../migrations", "-database", dsn, "down", "-all") // down the migrations
+	// Execute the migrations
+	_, err = migration_down_cmd.Output()
+	if err != nil {
+		log.Fatal("Error executing command:", err)
+		return
+	}
 	os.Exit(code)
 }
 
