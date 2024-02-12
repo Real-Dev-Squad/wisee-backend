@@ -34,7 +34,7 @@ type Form struct {
 }
 
 type FormMetaData struct {
-	bun.BaseModel `bun:"table:form_metadatas"`
+	bun.BaseModel `bun:"table:form_metadata"`
 
 	Id                               int64     `bun:"id,pk,autoincrement"`
 	FormId                           int64     `bun:"form_id"`
