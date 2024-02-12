@@ -17,7 +17,7 @@ else ifeq ($(ARCH),i386)
 	ARCH := 386
 endif
 
-build: $(BUILDDEPS)
+build:
 	@echo "Building $(OS) $(ARCH) binary..."
 	@GOOS=$(OS) GOARCH=$(ARCH) go build $(ARGS) -o "bin/$(BINARY_NAME)" src/main.go
 
