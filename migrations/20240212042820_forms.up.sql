@@ -1,19 +1,21 @@
 BEGIN;
 
-CREATE TYPE form_status_type AS ENUM ('DRAFT', 'PUBLISHED');
+CREATE SCHEMA forms;
 
-CREATE TABLE forms (
-    id SERIAL PRIMARY KEY,
+CREATE TYPE forms.status_type AS ENUM ('DRAFT', 'PUBLISHED');
+
+CREATE TABLE forms.form (
+    id bigserial PRIMARY KEY,
     content JSONB NOT NULL,
     created_by_id INT NOT NULL,
     owner_id INT NOT NULL,
-    "status" form_status_type NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "status" forms.status_type DEFAULT 'DRAFT',
+    created_at timestamp DEFAULT (NOW() AT TIME ZONE 'UTC'),
+    updated_at timestamp DEFAULT NULL
 );
 
-CREATE TABLE form_metadata (
-    id SERIAL PRIMARY KEY,
+CREATE TABLE forms.metadata (
+    id bigserial PRIMARY KEY,
     form_id INT NOT NULL,
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
     accepting_responses BOOLEAN NOT NULL DEFAULT FALSE,
@@ -21,43 +23,43 @@ CREATE TABLE form_metadata (
     allow_multiple_responses BOOLEAN NOT NULL DEFAULT FALSE,
     send_confirmation_email_to_respondee BOOLEAN NOT NULL DEFAULT FALSE,
     send_submission_email_to_owner BOOLEAN NOT NULL DEFAULT FALSE,
-    valid_till TIMESTAMP,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    valid_till timestamp,
+    created_at timestamp DEFAULT (NOW() AT TIME ZONE 'UTC'),
+    updated_at timestamp DEFAULT NULL
 );
 
-CREATE TABLE form_responses (
-    id SERIAL PRIMARY KEY,
+CREATE TABLE forms.responses (
+    id bigserial PRIMARY KEY,
     response_by_id INT NOT NULL,
     content JSONB NOT NULL,
     form_id INT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at timestamp DEFAULT (NOW() AT TIME ZONE 'UTC'),
+    updated_at timestamp DEFAULT NULL
 );
 
-ALTER TABLE forms
+ALTER TABLE forms.form
 ADD CONSTRAINT fk_forms_users_created_by
 FOREIGN KEY (created_by_id) 
 REFERENCES users(id);
 
-ALTER TABLE forms
+ALTER TABLE forms.form
 ADD CONSTRAINT fk_forms_users_owner
 FOREIGN KEY (owner_id) 
 REFERENCES users(id);
 
-ALTER TABLE form_metadata
+ALTER TABLE forms.metadata
 ADD CONSTRAINT fk_form_metadata_form
 FOREIGN KEY (form_id) 
-REFERENCES forms(id);
+REFERENCES forms.form(id);
 
-ALTER TABLE form_responses
+ALTER TABLE forms.responses
 ADD CONSTRAINT fk_form_responses_users
 FOREIGN KEY (response_by_id) 
 REFERENCES users(id);
 
-ALTER TABLE form_responses
+ALTER TABLE forms.responses
 ADD CONSTRAINT fk_form_responses_form
 FOREIGN KEY (form_id) 
-REFERENCES forms(id);
+REFERENCES forms.form(id);
 
 COMMIT;
