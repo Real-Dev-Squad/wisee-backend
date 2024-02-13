@@ -57,10 +57,12 @@ Migrations are handled using [golang-migrate](https://github.com/golang-migrate/
     - Password : `default`
 
 2. If you do have server created already, create a new server by clicking on the `Add New Server` button.
-   ![alt text](./public/images/readme/connect-to-db-step-1.png)
+
+    ![alt text](./public/images/readme/connect-to-db-step-1.png)
 
 3. Enter the server name
-   ![alt text](./public/images/readme/connect-to-db-step-2.png)
+
+    ![alt text](./public/images/readme/connect-to-db-step-2.png)
 
 4. Enter the connection details
 
@@ -72,4 +74,5 @@ Migrations are handled using [golang-migrate](https://github.com/golang-migrate/
     ![alt text](./public/images/readme/connect-to-db-step-3.png)
 
 5. Click on the `Save` button. You should now be able to see the server and associated databases in the left sidebar.
-   ![alt text](./public/images/readme/connect-to-db-step-4.png)
+
+    ![alt text](./public/images/readme/connect-to-db-step-4.png)
