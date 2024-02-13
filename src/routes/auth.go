@@ -6,8 +6,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/Real-Dev-Squad/wisee-backend/models"
-	"github.com/Real-Dev-Squad/wisee-backend/utils"
+	"github.com/Real-Dev-Squad/wisee-backend/src/models"
+	"github.com/Real-Dev-Squad/wisee-backend/src/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 	"golang.org/x/oauth2"

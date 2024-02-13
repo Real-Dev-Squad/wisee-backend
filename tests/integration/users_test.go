@@ -8,8 +8,8 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/Real-Dev-Squad/wisee-backend/routes"
-	"github.com/Real-Dev-Squad/wisee-backend/utils"
+	"github.com/Real-Dev-Squad/wisee-backend/src/routes"
+	"github.com/Real-Dev-Squad/wisee-backend/src/utils"
 	"github.com/uptrace/bun"
 )
 
