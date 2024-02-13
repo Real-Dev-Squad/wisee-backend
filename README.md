@@ -31,7 +31,7 @@ make setup
 make watch
 ```
 
-To check if the server is running, navigate to `http://localhost:8080/health-check` in your browser.
+To check if the server is running, navigate to `http://localhost:8080/health` in your browser.
 
 ### Creating a production build
 
