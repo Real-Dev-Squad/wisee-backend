@@ -1,0 +1,28 @@
+version: "3.0"
+
+services:
+    databse:
+        container_name: pg_db
+        image: postgres:16
+        restart: always
+        ports:
+            - "5432:5432"
+        volumes:
+            - ../database/init:/docker-entrypoint-initdb.d
+            - ../database/pgdata:/var/lib/postgresql/data
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_MULTIPLE_DATABASES: "wisee_core"
+
+    pgadmin:
+        image: dpage/pgadmin4
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: "default@wisee.com"
+            PGADMIN_DEFAULT_PASSWORD: "default"
+        ports:
+            - "54321:80"
+
+volumes:
+    pgdata:
