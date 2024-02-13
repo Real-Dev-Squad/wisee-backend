@@ -1,5 +1,5 @@
 BINARY_NAME := "wisee"
-DEV_DATABASE_URL := "postgres://postgres:postgres@localhost:5432/wisee?sslmode=disable"
+DEV_DATABASE_URL := "postgres://postgres:postgres@localhost:5432/wisee_core?sslmode=disable"
 
 ARCH := $(or $(GOARCH),$(shell uname -m))
 OS := $(or $(GOOS),$(shell uname))
@@ -91,6 +91,9 @@ setup:
 
 	@echo "--- Setting up docker ---"
 	@make docker-run
+
+	@echo "--- Waiting for database to setup ---"
+	@sleep 3
 
 	@echo "--- Running all migrations ---"
 	@make migrate-all-up

@@ -2,17 +2,18 @@ version: "3.0"
 
 services:
     databse:
-        container_name: core_pg_db
-        image: postgres:16-alpine
+        container_name: pg_db
+        image: postgres:16
         restart: always
         ports:
             - "5432:5432"
         volumes:
+            - ../database/init:/docker-entrypoint-initdb.d
             - ../database/pgdata:/var/lib/postgresql/data
         environment:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
-            POSTGRES_DB: wisee
+            POSTGRES_MULTIPLE_DATABASES: "wisee_core,wisee_core_test"
 
     pgadmin:
         image: dpage/pgadmin4
