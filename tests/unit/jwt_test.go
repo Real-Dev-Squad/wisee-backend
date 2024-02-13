@@ -4,8 +4,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Real-Dev-Squad/wisee-backend/models"
-	"github.com/Real-Dev-Squad/wisee-backend/utils"
+	"github.com/Real-Dev-Squad/wisee-backend/src/models"
+	"github.com/Real-Dev-Squad/wisee-backend/src/utils"
 )
 
 func TestMain(m *testing.M) {

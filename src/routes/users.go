@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"github.com/Real-Dev-Squad/wisee-backend/models"
+	"github.com/Real-Dev-Squad/wisee-backend/src/models"
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 )
