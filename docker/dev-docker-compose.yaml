@@ -13,7 +13,7 @@ services:
         environment:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
-            POSTGRES_MULTIPLE_DATABASES: "wisee_core,wisee_core_test"
+            POSTGRES_MULTIPLE_DATABASES: "wisee_core"
 
     pgadmin:
         image: dpage/pgadmin4
