@@ -21,7 +21,7 @@ CREATE TABLE forms.metadata (
     accepting_responses BOOLEAN NOT NULL DEFAULT FALSE,
     allow_guest_responses BOOLEAN NOT NULL DEFAULT TRUE,
     allow_multiple_responses BOOLEAN NOT NULL DEFAULT FALSE,
-    send_confirmation_email_to_respondee BOOLEAN NOT NULL DEFAULT FALSE,
+    send_confirmation_email_to_responde BOOLEAN NOT NULL DEFAULT FALSE,
     send_submission_email_to_owner BOOLEAN NOT NULL DEFAULT FALSE,
     valid_till timestamp,
     created_at timestamp DEFAULT (NOW() AT TIME ZONE 'UTC'),
