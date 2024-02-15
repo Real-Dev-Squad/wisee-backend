@@ -26,6 +26,8 @@ type Form struct {
 	Content     FormContent      `bun:"content" json:"content"`
 	CreatedById int64            `bun:"created_by_id" json:"created_by_id"`
 	CreatedBy   *User            `bun:"rel:belongs-to,join:created_by_id=id" json:"created_by"`
+	UpdatedById int64            `bun:"updated_by_id,default:null" json:"updated_by_id"`
+	UpdatedBy   *User            `bun:"rel:belongs-to,join:updated_by_id=id" json:"updated_by"`
 	OwnerId     int64            `bun:"owner_id" json:"owner_id"`
 	Owner       *User            `bun:"rel:belongs-to,join:owner_id=id" json:"owner"`
 	Status      FORM_STATUS_TYPE `bun:"status,default:'DRAFT'" json:"status"`
@@ -46,6 +48,8 @@ type FormMetaData struct {
 	SendConfirmationEmailToRespondee bool      `bun:"send_confirmation_email_to_respondee,default:false" json:"send_confirmation_email_to_respondee"`
 	SendSubmissionEmailToOwner       bool      `bun:"send_submission_email_to_owner,default:false" json:"send_submission_email_to_owner"`
 	ValidTill                        time.Time `bun:"valid_till" json:"valid_till"`
+	UpdatedById                      int64     `bun:"updated_by_id,default:null" json:"updated_by_id"`
+	UpdatedBy                        *User     `bun:"rel:belongs-to,join:updated_by_id=id" json:"updated_by"`
 	// invite code
 	CreatedAt time.Time `bun:"created_at,nullzero,notnull,default:current_timestamp" json:"created_at"`
 	UpdatedAt time.Time `bun:"updated_at,default:null" json:"updated_at"`

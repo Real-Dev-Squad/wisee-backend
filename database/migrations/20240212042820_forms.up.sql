@@ -10,6 +10,7 @@ CREATE TABLE forms.form (
     created_by_id INT NOT NULL,
     owner_id INT NOT NULL,
     "status" forms.status_type DEFAULT 'DRAFT',
+    updated_by_id INT,
     created_at timestamp DEFAULT (NOW() AT TIME ZONE 'UTC'),
     updated_at timestamp DEFAULT NULL
 );
@@ -23,6 +24,7 @@ CREATE TABLE forms.metadata (
     allow_multiple_responses BOOLEAN NOT NULL DEFAULT FALSE,
     send_confirmation_email_to_respondee BOOLEAN NOT NULL DEFAULT FALSE,
     send_submission_email_to_owner BOOLEAN NOT NULL DEFAULT FALSE,
+    updated_by_id INT,
     valid_till timestamp,
     created_at timestamp DEFAULT (NOW() AT TIME ZONE 'UTC'),
     updated_at timestamp DEFAULT NULL
@@ -47,10 +49,20 @@ ADD CONSTRAINT fk_forms_users_owner
 FOREIGN KEY (owner_id) 
 REFERENCES users(id);
 
+ALTER TABLE forms.form
+ADD CONSTRAINT fk_forms_users_updated_by
+FOREIGN KEY (updated_by_id) 
+REFERENCES users(id);
+
 ALTER TABLE forms.metadata
 ADD CONSTRAINT fk_form_metadata_form
 FOREIGN KEY (form_id) 
 REFERENCES forms.form(id);
+
+ALTER TABLE forms.metadata
+ADD CONSTRAINT fk_form_metadata_users_updated_by
+FOREIGN KEY (updated_by_id)
+REFERENCES users(id);
 
 ALTER TABLE forms.responses
 ADD CONSTRAINT fk_form_responses_users
