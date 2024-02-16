@@ -17,13 +17,13 @@ type ResponseDto struct {
 	Error   ErrorResponse `json:"error"`
 }
 
-type CreateUpdateFormResponseDto struct {
+type CreateUpdateGetFormResponseDto struct {
 	Id          int64              `json:"id"`
 	Content     models.FormContent `json:"content"`
 	OwnerId     int64              `json:"owner_id"`
 	CreatedById int64              `json:"created_by_id"`
 	Status      string             `json:"status"`
-	UpdatedById int64              `json:"updated_by_id"`
+	UpdatedById *int64             `json:"updated_by_id"`
 	CreatedAt   string             `json:"created_at"`
 	UpdatedAt   string             `json:"updated_at"`
 }
@@ -43,7 +43,7 @@ type GetFormMetaDataResponseDto struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type GetFormsResponseDto []CreateUpdateFormResponseDto
+type GetFormsResponseDto []CreateUpdateGetFormResponseDto
 
 type GetFormDetailResponseDto struct {
 	Id          int64                      `json:"id"`
