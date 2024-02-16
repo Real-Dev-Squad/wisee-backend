@@ -3,3 +3,5 @@ TODO
 tmp
 .env
 .env.local
+bin
+database/pgdata
