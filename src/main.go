@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	utils.LoadEnv(".env")
+	utils.LoadEnv("../.env")
 	dsn := os.Getenv("DB_URL")
 	db := utils.SetupDBConnection(dsn)
 

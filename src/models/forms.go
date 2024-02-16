@@ -50,7 +50,8 @@ type FormMetaData struct {
 	ValidTill                        time.Time `bun:"valid_till" json:"valid_till"`
 	UpdatedById                      *int64    `bun:"updated_by_id,default:null" json:"updated_by_id"`
 	UpdatedBy                        *User     `bun:"rel:belongs-to,join:updated_by_id=id" json:"updated_by"`
-	// invite code
+	// TODO invite code
+	// TODO remove created by
 	CreatedAt time.Time `bun:"created_at,nullzero,notnull,default:current_timestamp" json:"created_at"`
 	UpdatedAt time.Time `bun:"updated_at,default:null" json:"updated_at"`
 }
