@@ -17,20 +17,9 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 		if err := ctx.ShouldBindJSON(&requestBody); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "invalid request",
-				Error: dtos.ErrorResponse{
+				Error: &dtos.ErrorResponse{
 					Message: "invalid request body",
 					Detail:  err.Error(),
-				},
-			}
-			ctx.JSON(http.StatusBadRequest, errObj)
-			return
-		}
-
-		if requestBody.Status != string(models.DRAFT) && requestBody.Status != string(models.PUBLISHED) {
-			errObj := dtos.ResponseDto{
-				Message: "invalid request",
-				Error: dtos.ErrorResponse{
-					Message: "invalid status",
 				},
 			}
 			ctx.JSON(http.StatusBadRequest, errObj)
@@ -40,14 +29,14 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 		var form = &models.Form{
 			Content:     requestBody.Content,
 			CreatedById: requestBody.PerformedById,
-			Status:      models.FORM_STATUS_TYPE(requestBody.Status),
+			Status:      models.DRAFT,
 			OwnerId:     requestBody.PerformedById,
 		}
 
 		if _, err := db.NewInsert().Model(form).Exec(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
-				Error: dtos.ErrorResponse{
+				Error: &dtos.ErrorResponse{
 					Message: "error creating form",
 					Detail:  err.Error(),
 				},
@@ -63,7 +52,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 		if _, err := db.NewInsert().Model(FormMetaData).Exec(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
-				Error: dtos.ErrorResponse{
+				Error: &dtos.ErrorResponse{
 					Message: "error creating form meta data",
 					Detail:  err.Error(),
 				},
@@ -95,7 +84,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 		if err := db.NewSelect().Model(&form).OrderExpr("id ASC").Limit(10).Scan(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
-				Error: dtos.ErrorResponse{
+				Error: &dtos.ErrorResponse{
 					Message: "error fetching forms",
 					Detail:  err.Error(),
 				},
@@ -130,7 +119,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 		if err := db.NewSelect().Model(&form).Where("id = ?", ctx.Param("id")).Scan(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
-				Error: dtos.ErrorResponse{
+				Error: &dtos.ErrorResponse{
 					Message: "error fetching form",
 					Detail:  err.Error(),
 				},
@@ -143,7 +132,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 		if err := db.NewSelect().Model(&formMetaData).Where("form_id = ?", ctx.Param("id")).Scan(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
-				Error: dtos.ErrorResponse{
+				Error: &dtos.ErrorResponse{
 					Message: "error fetching form meta data",
 					Detail:  err.Error(),
 				},
@@ -189,7 +178,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 		if err := ctx.ShouldBindJSON(&requestBody); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "invalid request",
-				Error: dtos.ErrorResponse{
+				Error: &dtos.ErrorResponse{
 					Message: "invalid request body",
 					Detail:  err.Error(),
 				},
@@ -202,7 +191,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 		if err := db.NewSelect().Model(&form).Where("id = ?", ctx.Param("id")).Scan(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
-				Error: dtos.ErrorResponse{
+				Error: &dtos.ErrorResponse{
 					Message: "error fetching form",
 					Detail:  err.Error(),
 				},
@@ -211,15 +200,26 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			return
 		}
 
+		if requestBody.Status == nil || (*requestBody.Status != string(models.DRAFT) && *requestBody.Status != string(models.PUBLISHED)) {
+			errObj := dtos.ResponseDto{
+				Message: "invalid request",
+				Error: &dtos.ErrorResponse{
+					Message: "invalid status",
+				},
+			}
+			ctx.JSON(http.StatusBadRequest, errObj)
+			return
+		}
+
 		form.Content = requestBody.Content
-		form.Status = models.FORM_STATUS_TYPE(requestBody.Status)
+		form.Status = models.FORM_STATUS_TYPE(*requestBody.Status)
 		form.OwnerId = requestBody.PerformedById
 		form.UpdatedById = &requestBody.PerformedById
 
 		if _, err := db.NewUpdate().Model(&form).Where("id = ?", ctx.Param("id")).Exec(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
-				Error: dtos.ErrorResponse{
+				Error: &dtos.ErrorResponse{
 					Message: "error updating form",
 					Detail:  err.Error(),
 				},

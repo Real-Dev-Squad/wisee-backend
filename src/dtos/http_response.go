@@ -12,9 +12,9 @@ type ErrorResponse struct {
 }
 
 type ResponseDto struct {
-	Message string        `json:"message"`
-	Data    interface{}   `json:"data"`
-	Error   ErrorResponse `json:"error"`
+	Message string         `json:"message"`
+	Data    interface{}    `json:"data"`
+	Error   *ErrorResponse `json:"error"`
 }
 
 type CreateUpdateGetFormResponseDto struct {

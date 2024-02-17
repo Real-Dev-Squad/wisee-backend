@@ -73,7 +73,7 @@ type Block struct {
 	ID      string      `json:"id"`
 	Type    string      `json:"type"`
 	Content string      `json:"content"`
-	GroupId string      `json:"groupID"`
+	GroupId string      `json:"group_id"`
 	Order   int         `json:"order"`
 	Meta    interface{} `json:"meta"`
 }
