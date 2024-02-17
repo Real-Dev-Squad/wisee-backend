@@ -16,12 +16,6 @@ import (
 	"github.com/Real-Dev-Squad/wisee-backend/src/routes"
 )
 
-type TestResponseDto struct {
-	Message string             `json:"message"`
-	Data    json.RawMessage    `json:"data"`
-	Error   dtos.ErrorResponse `json:"error"`
-}
-
 func TestFormCreate(t *testing.T) {
 	router := routes.SetupV1Routes(db)
 	// add the DTO
@@ -157,4 +151,33 @@ func TestFormUpdate(t *testing.T) {
 	assert.Equal(t, http.StatusAccepted, w.Code)
 	assert.Equal(t, "form updated successfully", respBody.Message)
 	assert.Equal(t, user.Id, *resData.UpdatedById)
+}
+
+func TestFormUpdateInavlidStatus(t *testing.T) {
+	router := routes.SetupV1Routes(db)
+
+	// add the DTO
+	var requestBody = map[string]interface{}{
+		"performed_by_id": user.Id,
+		"content":         models.FormContent{"blocks": []models.Block{{ID: "1", Type: "text", Content: "Hello World", GroupId: "1", Meta: nil, Order: 1}}},
+	}
+
+	// Convert requestBody to JSON
+	jsonValue, _ := json.Marshal(requestBody)
+
+	w := httptest.NewRecorder()
+	req, err := http.NewRequest("PATCH", fmt.Sprintf("/v1/forms/%v", form.Id), bytes.NewBuffer(jsonValue))
+
+	router.ServeHTTP(w, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var respBody TestResponseDto
+	if err := json.NewDecoder(w.Body).Decode(&respBody); err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, "invalid status", respBody.Error.Message)
 }
