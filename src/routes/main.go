@@ -12,6 +12,7 @@ func SetupV1Routes(db *bun.DB) *gin.Engine {
 	v1 := router.Group("v1/")
 	UserRoutes(v1, db)
 	AuthRoutes(v1, db)
+	FormRoutes(v1, db)
 
 	router.GET("/health", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
