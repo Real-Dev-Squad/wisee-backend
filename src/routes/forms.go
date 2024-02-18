@@ -81,7 +81,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 
 	forms.GET("", func(ctx *gin.Context) {
 		var form []models.Form
-		if err := db.NewSelect().Model(&form).OrderExpr("id ASC").Limit(10).Scan(ctx); err != nil {
+		if err := db.NewSelect().Model(&form).OrderExpr("id ASC").Scan(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
 				Error: &dtos.ErrorResponse{
@@ -100,6 +100,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 				Content:     f.Content,
 				OwnerId:     f.OwnerId,
 				CreatedById: f.CreatedById,
+				UpdatedById: f.UpdatedById,
 				Status:      string(f.Status),
 				CreatedAt:   f.CreatedAt.String(),
 				UpdatedAt:   f.UpdatedAt.String(),

@@ -16,7 +16,7 @@ import (
 	"github.com/Real-Dev-Squad/wisee-backend/src/routes"
 )
 
-func TestFormCreate(t *testing.T) {
+func TestFormCreation(t *testing.T) {
 	router := routes.SetupV1Routes(db)
 	// add the DTO
 	var requestBody = map[string]interface{}{
