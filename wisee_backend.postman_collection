@@ -1,0 +1,297 @@
+{
+	"info": {
+		"_postman_id": "4d36e291-e3e8-4360-991d-824d36792aec",
+		"name": "Wisee_backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26854281"
+	},
+	"item": [
+		{
+			"name": "Create Form",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": {\r\n        \"blocks\": [\r\n            {\r\n                \"id\": \"1\",\r\n                \"type\": \"text\",\r\n                \"content\": \"Hello World\",\r\n                \"group_id\": \"1\",\r\n                \"order\": 1\r\n            }\r\n        ]\r\n    },\r\n    \"performed_by_id\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/v1/forms",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"v1",
+						"forms"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "create form success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": {\r\n        \"blocks\": [\r\n            {\r\n                \"id\": \"1\",\r\n                \"type\": \"text\",\r\n                \"content\": \"Hello World\",\r\n                \"group_id\": \"1\",\r\n                \"order\": 1\r\n            }\r\n        ]\r\n    },\r\n    \"performed_by_id\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/v1/forms",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"v1",
+								"forms"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 17 Feb 2024 17:48:19 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "343"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"form created successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"content\": {\n            \"blocks\": [\n                {\n                    \"id\": \"1\",\n                    \"type\": \"text\",\n                    \"content\": \"Hello World\",\n                    \"group_id\": \"1\",\n                    \"order\": 1,\n                    \"meta\": null\n                }\n            ]\n        },\n        \"owner_id\": 3,\n        \"created_by_id\": 3,\n        \"status\": \"DRAFT\",\n        \"updated_by_id\": null,\n        \"created_at\": \"2024-02-17 17:48:19.565039 +0000 UTC\",\n        \"updated_at\": \"0001-01-01 00:00:00 +0000 UTC\"\n    },\n    \"error\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Update Form",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": {\r\n        \"blocks\": [\r\n            {\r\n                \"id\": \"1\",\r\n                \"type\": \"text\",\r\n                \"content\": \"Hello World\",\r\n                \"group_id\": \"1\",\r\n                \"order\": 1\r\n            },\r\n            {\r\n                \"id\": \"2\",\r\n                \"type\": \"text\",\r\n                \"content\": \"Hello World again\",\r\n                \"group_id\": \"1\",\r\n                \"order\": 3\r\n            }\r\n        ]\r\n    },\r\n    \"performed_by_id\": 3,\r\n    \"status\": \"PUBLISHED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/v1/forms/1",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"v1",
+						"forms",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Update Form",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": {\r\n        \"blocks\": [\r\n            {\r\n                \"id\": \"1\",\r\n                \"type\": \"text\",\r\n                \"content\": \"Hello World\",\r\n                \"group_id\": \"1\",\r\n                \"order\": 1\r\n            },\r\n            {\r\n                \"id\": \"2\",\r\n                \"type\": \"text\",\r\n                \"content\": \"Hello World again\",\r\n                \"group_id\": \"1\",\r\n                \"order\": 3\r\n            }\r\n        ]\r\n    },\r\n    \"performed_by_id\": 3,\r\n    \"status\": \"PUBLISHED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/v1/forms/1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"v1",
+								"forms",
+								"1"
+							]
+						}
+					},
+					"status": "Accepted",
+					"code": 202,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 17 Feb 2024 17:51:11 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "436"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"form updated successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"content\": {\n            \"blocks\": [\n                {\n                    \"id\": \"1\",\n                    \"type\": \"text\",\n                    \"content\": \"Hello World\",\n                    \"group_id\": \"1\",\n                    \"order\": 1,\n                    \"meta\": null\n                },\n                {\n                    \"id\": \"2\",\n                    \"type\": \"text\",\n                    \"content\": \"Hello World again\",\n                    \"group_id\": \"1\",\n                    \"order\": 3,\n                    \"meta\": null\n                }\n            ]\n        },\n        \"owner_id\": 3,\n        \"created_by_id\": 3,\n        \"status\": \"PUBLISHED\",\n        \"updated_by_id\": 3,\n        \"created_at\": \"2024-02-17 17:48:19.565039 +0000 UTC\",\n        \"updated_at\": \"0001-01-01 00:00:00 +0000 UTC\"\n    },\n    \"error\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Get all forms",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/v1/forms",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"v1",
+						"forms"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "get all forms success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/v1/forms",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"v1",
+								"forms"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 17 Feb 2024 17:48:57 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "346"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"forms fetched successfully\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"content\": {\n                \"blocks\": [\n                    {\n                        \"id\": \"1\",\n                        \"type\": \"text\",\n                        \"content\": \"Hello World\",\n                        \"group_id\": \"1\",\n                        \"order\": 1,\n                        \"meta\": null\n                    }\n                ]\n            },\n            \"owner_id\": 3,\n            \"created_by_id\": 3,\n            \"status\": \"DRAFT\",\n            \"updated_by_id\": null,\n            \"created_at\": \"2024-02-17 17:48:19.565039 +0000 UTC\",\n            \"updated_at\": \"0001-01-01 00:00:00 +0000 UTC\"\n        }\n    ],\n    \"error\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Get form by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/v1/forms/1",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"v1",
+						"forms",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "get form by id success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/v1/forms/1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"v1",
+								"forms",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 17 Feb 2024 17:49:31 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "657"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"form fetched successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"owner_id\": 3,\n        \"status\": \"DRAFT\",\n        \"created_by_id\": 3,\n        \"updated_by_id\": null,\n        \"created_at\": \"2024-02-17 17:48:19.565039 +0000 UTC\",\n        \"updated_at\": \"0001-01-01 00:00:00 +0000 UTC\",\n        \"content\": {\n            \"blocks\": [\n                {\n                    \"id\": \"1\",\n                    \"type\": \"text\",\n                    \"content\": \"Hello World\",\n                    \"group_id\": \"1\",\n                    \"order\": 1,\n                    \"meta\": null\n                }\n            ]\n        },\n        \"meta\": {\n            \"id\": 1,\n            \"form_id\": 1,\n            \"is_deleted\": false,\n            \"accepting_responses\": false,\n            \"allow_guest_responses\": true,\n            \"allow_multiple_responses\": false,\n            \"send_confirmation_email_to_respondee\": false,\n            \"send_submission_email_to_owner\": false,\n            \"valid_till\": \"0001-01-01T00:00:00Z\",\n            \"updated_by_id\": null,\n            \"updated_at\": \"0001-01-01T00:00:00Z\"\n        }\n    },\n    \"error\": null\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://127.0.0.1:8080",
+			"type": "string"
+		}
+	]
+}
