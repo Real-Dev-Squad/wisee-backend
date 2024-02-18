@@ -17,9 +17,9 @@ var form *models.Form
 var formMetaData *models.FormMetaData
 
 type TestResponseDto struct {
-	Message string             `json:"message"`
-	Data    json.RawMessage    `json:"data"`
-	Error   dtos.ErrorResponse `json:"error"`
+	Message string              `json:"message"`
+	Data    json.RawMessage     `json:"data"`
+	Error   *dtos.ErrorResponse `json:"error"`
 }
 
 func SetupFixtures(db *bun.DB) error {
@@ -50,7 +50,6 @@ func SetupFixtures(db *bun.DB) error {
 
 func TeardownDb(dsn string) {
 	migration_down_cmd := exec.Command("migrate", "-path", "../../database/migrations", "-database", dsn, "down", "-all") // down the
-	fmt.Println("damn, hogaya")
 	// Execute the migrations
 	_, err := migration_down_cmd.Output()
 	if err != nil {

@@ -59,6 +59,39 @@ func TestFormCreation(t *testing.T) {
 	assert.Equal(t, resData.Id, formMetaData.FormId)
 }
 
+func TestFormCreationNoPerformedById(t *testing.T) {
+	router := routes.SetupV1Routes(db)
+	// add the DTO
+	var requestBody = map[string]interface{}{
+		"content": models.FormContent{"blocks": []models.Block{{ID: "1", Type: "text", Content: "Hello World", GroupId: "1", Meta: nil, Order: 1}}},
+	}
+
+	// Convert requestBody to JSON
+	jsonValue, _ := json.Marshal(requestBody)
+
+	w := httptest.NewRecorder()
+	req, err := http.NewRequest("POST", "/v1/forms", bytes.NewBuffer(jsonValue))
+
+	router.ServeHTTP(w, req)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var respBody TestResponseDto
+	if err := json.NewDecoder(w.Body).Decode(&respBody); err != nil {
+		t.Fatal(err)
+	}
+
+	var resError TestResponseDto
+	if err := json.Unmarshal(respBody.Data, &resError); err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, "something went wrong", respBody.Message)
+}
+
 func TestFormGetAll(t *testing.T) {
 	router := routes.SetupV1Routes(db)
 	w := httptest.NewRecorder()
@@ -114,6 +147,29 @@ func TestFormGetById(t *testing.T) {
 	assert.Equal(t, formMetaData.Id, resData.Meta.Id)
 	assert.Equal(t, formMetaData.FormId, resData.Meta.FormId)
 }
+func TestFormGetByInvalidId(t *testing.T) {
+	router := routes.SetupV1Routes(db)
+	w := httptest.NewRecorder()
+	req, err := http.NewRequest("GET", fmt.Sprintf("/v1/forms/%v", 1526), nil)
+
+	router.ServeHTTP(w, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var respBody TestResponseDto
+	if err := json.NewDecoder(w.Body).Decode(&respBody); err != nil {
+		t.Fatal(err)
+	}
+
+	var resData dtos.GetFormDetailResponseDto
+	if err := json.Unmarshal(respBody.Data, &resData); err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Contains(t, respBody.Error.Detail, "no rows in result set")
+}
 
 func TestFormUpdate(t *testing.T) {
 	assert.Nil(t, form.UpdatedById)
@@ -158,6 +214,7 @@ func TestFormUpdateInavlidStatus(t *testing.T) {
 
 	// add the DTO
 	var requestBody = map[string]interface{}{
+		"status":          "random",
 		"performed_by_id": user.Id,
 		"content":         models.FormContent{"blocks": []models.Block{{ID: "1", Type: "text", Content: "Hello World", GroupId: "1", Meta: nil, Order: 1}}},
 	}
@@ -180,4 +237,33 @@ func TestFormUpdateInavlidStatus(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, "invalid status", respBody.Error.Message)
+}
+func TestFormUpdateInavlidFormId(t *testing.T) {
+	router := routes.SetupV1Routes(db)
+
+	// add the DTO
+	var requestBody = map[string]interface{}{
+		"status":          "DRAFT",
+		"performed_by_id": user.Id,
+		"content":         models.FormContent{"blocks": []models.Block{{ID: "1", Type: "text", Content: "Hello World", GroupId: "1", Meta: nil, Order: 1}}},
+	}
+
+	// Convert requestBody to JSON
+	jsonValue, _ := json.Marshal(requestBody)
+
+	w := httptest.NewRecorder()
+	req, err := http.NewRequest("PATCH", fmt.Sprintf("/v1/forms/%v", 15668), bytes.NewBuffer(jsonValue))
+
+	router.ServeHTTP(w, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var respBody TestResponseDto
+	if err := json.NewDecoder(w.Body).Decode(&respBody); err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Contains(t, respBody.Error.Detail, "no rows in result set")
 }

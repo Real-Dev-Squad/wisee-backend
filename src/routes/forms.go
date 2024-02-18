@@ -13,7 +13,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 	forms := rg.Group("/forms")
 
 	forms.POST("", func(ctx *gin.Context) {
-		var requestBody dtos.CreateUpdateFormRequestDto
+		var requestBody dtos.CreateFormRequestDto
 		if err := ctx.ShouldBindJSON(&requestBody); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "invalid request",
@@ -116,8 +116,11 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 	})
 
 	forms.GET("/:id", func(ctx *gin.Context) {
+		var formMetaData models.FormMetaData
 		var form models.Form
-		if err := db.NewSelect().Model(&form).Where("id = ?", ctx.Param("id")).Scan(ctx); err != nil {
+
+		query := db.NewSelect().Model(&formMetaData).Relation("Form").Where("form_id = ?", ctx.Param("id"))
+		if err := query.Scan(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
 				Error: &dtos.ErrorResponse{
@@ -129,18 +132,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			return
 		}
 
-		var formMetaData models.FormMetaData
-		if err := db.NewSelect().Model(&formMetaData).Where("form_id = ?", ctx.Param("id")).Scan(ctx); err != nil {
-			errObj := dtos.ResponseDto{
-				Message: "something went wrong",
-				Error: &dtos.ErrorResponse{
-					Message: "error fetching form meta data",
-					Detail:  err.Error(),
-				},
-			}
-			ctx.JSON(http.StatusBadRequest, errObj)
-			return
-		}
+		form = *formMetaData.Form
 
 		var resData = dtos.GetFormDetailResponseDto{
 			Id:          form.Id,
@@ -175,7 +167,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 	})
 
 	forms.PATCH("/:id", func(ctx *gin.Context) {
-		var requestBody dtos.CreateUpdateFormRequestDto
+		var requestBody dtos.UpdateFormRequestDto
 		if err := ctx.ShouldBindJSON(&requestBody); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "invalid request",
@@ -201,7 +193,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			return
 		}
 
-		if requestBody.Status == nil || (*requestBody.Status != string(models.DRAFT) && *requestBody.Status != string(models.PUBLISHED)) {
+		if requestBody.Status != string(models.DRAFT) && requestBody.Status != string(models.PUBLISHED) {
 			errObj := dtos.ResponseDto{
 				Message: "invalid request",
 				Error: &dtos.ErrorResponse{
@@ -213,7 +205,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 		}
 
 		form.Content = requestBody.Content
-		form.Status = models.FORM_STATUS_TYPE(*requestBody.Status)
+		form.Status = models.FORM_STATUS_TYPE(requestBody.Status)
 		form.OwnerId = requestBody.PerformedById
 		form.UpdatedById = &requestBody.PerformedById
 
