@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 	"path"
 	"runtime"
@@ -52,14 +51,6 @@ func loadEnv() {
 
 		return
 	}
-
-	// print the current directory
-	dir, err := os.Getwd()
-	if err != nil {
-		logger.Error("Error getting current directory.", err)
-	}
-
-	fmt.Println("Current directory:", dir)
 
 	if err := godotenv.Load(".env"); err != nil {
 		logger.Fatal("Error loading .env file")

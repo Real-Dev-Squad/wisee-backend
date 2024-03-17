@@ -23,10 +23,7 @@ jobs:
             - run: go version
 
             - name: Copy Env
-              run: cp ./environments/dev.env .env
-
-            - name: display env
-              run: cat .env
+              run: cp ./environments/test.env .env
 
             - name: Run Unit tests
               run: go test ./tests/unit
