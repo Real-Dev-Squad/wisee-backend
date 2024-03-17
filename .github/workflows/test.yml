@@ -41,7 +41,7 @@ jobs:
               run: cp ./environments/test.env .env
 
             - name: Run Unit tests
-              run: ENV=test go test ./tests/unit -v
+              run: make test_unit
 
             - name: Run Integration tests
-              run: ENV=test go test ./tests/integration -v
+              run: make test_integration
