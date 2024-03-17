@@ -2,26 +2,23 @@ package utils
 
 import (
 	"errors"
-	"os"
-	"strconv"
 	"time"
 
+	"github.com/Real-Dev-Squad/wisee-backend/src/config"
 	"github.com/Real-Dev-Squad/wisee-backend/src/models"
 	"github.com/golang-jwt/jwt/v5"
 )
+
+var jwtSecret = config.JwtSecret
 
 /*
  * GenerateToken generates a JWT token for the user
  */
 func GenerateToken(user *models.User) (string, error) {
-	issuer := os.Getenv("JWT_ISSUER")
-	key := []byte(os.Getenv("JWT_SECRET"))
+	issuer := config.JwtIssuer
+	key := []byte(jwtSecret)
 
-	tokenValidityInHours, err := strconv.ParseInt(os.Getenv("JWT_VALIDITY_IN_HOURS"), 10, 8)
-
-	if err != nil {
-		return "", err
-	}
+	tokenValidityInHours := config.JwtValidityInHours
 
 	tokenExpiryTime := time.Now().Add(time.Second * time.Duration(tokenValidityInHours)).UTC().Format(time.RFC3339)
 
@@ -48,7 +45,7 @@ func VerifyToken(tokenString string) (string, error) {
 			return nil, jwt.ErrSignatureInvalid
 		}
 
-		return []byte(os.Getenv("JWT_SECRET")), nil
+		return []byte(jwtSecret), nil
 	})
 
 	if c, ok := token.Claims.(jwt.MapClaims); !ok && !token.Valid {
