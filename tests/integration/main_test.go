@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"testing"
 
+	"github.com/Real-Dev-Squad/wisee-backend/src/config"
 	"github.com/Real-Dev-Squad/wisee-backend/src/utils"
 	"github.com/uptrace/bun"
 )
@@ -13,8 +14,7 @@ import (
 var db *bun.DB
 
 func TestMain(m *testing.M) {
-	utils.LoadEnv("../../.env")
-	dsn := os.Getenv("TEST_DB_URL")
+	dsn := config.TestDbUrl
 	db = utils.SetupDBConnection(dsn)
 	defer TeardownDb(dsn)
 

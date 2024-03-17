@@ -2,9 +2,8 @@ package utils
 
 import (
 	"database/sql"
-	"os"
-	"strconv"
 
+	"github.com/Real-Dev-Squad/wisee-backend/src/config"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"
@@ -12,15 +11,9 @@ import (
 )
 
 func SetupDBConnection(dsn string) *bun.DB {
-	maxOpenConnectionsStr := os.Getenv("DB_MAX_OPEN_CONNECTIONS")
-	maxOpenConnections, err := strconv.Atoi(maxOpenConnectionsStr)
-
-	if err != nil {
-		panic(err)
-	}
+	maxOpenConnections := config.DbMaxOpenConnections
 
 	pgDB := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dsn)))
-
 	pgDB.SetMaxOpenConns(maxOpenConnections)
 
 	db := bun.NewDB(pgDB, pgdialect.New())
