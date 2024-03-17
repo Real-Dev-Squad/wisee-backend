@@ -1,10 +1,11 @@
-// source: https://github.com/championswimmer/onepixel_backend/blob/1ed767e2244832bf8e50be1eaa3d4f2edb7e1190/src/utils/applogger/app_logger.go
+// inspired by: https://github.com/championswimmer/onepixel_backend/blob/1ed767e2244832bf8e50be1eaa3d4f2edb7e1190/src/utils/applogger/app_logger.go
 
 package logger
 
 import (
 	"log"
 	"os"
+	"runtime"
 )
 
 const (
@@ -59,7 +60,8 @@ func Error(v ...interface{}) {
 }
 
 func Fatal(v ...interface{}) {
-	fatalLogger.Println(v...)
+	_, file, line, _ := runtime.Caller(1)
+	fatalLogger.Printf("%s:%d: %v\n", file, line, v)
 	os.Exit(1)
 }
 

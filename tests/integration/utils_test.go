@@ -3,12 +3,11 @@ package integration_tests
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"log"
-	"os/exec"
 
 	"github.com/Real-Dev-Squad/wisee-backend/src/dtos"
 	"github.com/Real-Dev-Squad/wisee-backend/src/models"
+	"github.com/Real-Dev-Squad/wisee-backend/src/utils/logger"
+	"github.com/golang-migrate/migrate/v4"
 	"github.com/uptrace/bun"
 )
 
@@ -24,6 +23,8 @@ type TestResponseDto struct {
 
 func SetupFixtures(db *bun.DB) error {
 	var ctx = context.Background()
+	logger.Info("setting up fixtures")
+	defer logger.Info("fixtures setup complete")
 
 	userFixture := &models.User{Username: "test_user", Email: "test_user@admin.com", Password: "password"}
 	if _, err := db.NewInsert().Model(userFixture).Exec(ctx); err != nil {
@@ -48,13 +49,11 @@ func SetupFixtures(db *bun.DB) error {
 	return nil
 }
 
-func TeardownDb(dsn string) {
-	migration_down_cmd := exec.Command("migrate", "-path", "../../database/migrations", "-database", dsn, "down", "-all") // down the
-	// Execute the migrations
-	_, err := migration_down_cmd.Output()
-	if err != nil {
-		log.Fatal("Error executing migration down command:", err)
-		fmt.Println("You may have to manually teardown the database")
-		return
+func TeardownDb(migrate *migrate.Migrate) {
+	logger.Info("Running migration down")
+	defer logger.Info("Migration down complete")
+
+	if err := migrate.Down(); err != nil {
+		logger.Fatal("failed to run migration down: ", err)
 	}
 }

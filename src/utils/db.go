@@ -10,18 +10,18 @@ import (
 	"github.com/uptrace/bun/extra/bundebug"
 )
 
-func SetupDBConnection(dsn string) *bun.DB {
+func SetupDBConnection(dsn string) (*sql.DB, *bun.DB) {
 	maxOpenConnections := config.DbMaxOpenConnections
 
 	pgDB := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dsn)))
 	pgDB.SetMaxOpenConns(maxOpenConnections)
 
-	db := bun.NewDB(pgDB, pgdialect.New())
+	bunDbInstance := bun.NewDB(pgDB, pgdialect.New())
 
-	db.AddQueryHook(bundebug.NewQueryHook(
+	bunDbInstance.AddQueryHook(bundebug.NewQueryHook(
 		bundebug.WithVerbose(true),
 		bundebug.FromEnv("BUNDEBUG"),
 	))
 
-	return db
+	return pgDB, bunDbInstance
 }
