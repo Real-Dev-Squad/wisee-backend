@@ -9,8 +9,6 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	utils.LoadEnv("../../.env")
-
 	code := m.Run()
 
 	os.Exit(code)

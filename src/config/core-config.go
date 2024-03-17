@@ -2,6 +2,8 @@ package config
 
 import (
 	"os"
+	"path"
+	"runtime"
 	"strconv"
 
 	"github.com/Real-Dev-Squad/wisee-backend/src/utils/logger"
@@ -28,10 +30,30 @@ var GoogleRedirectUrl string
 func loadEnv() {
 	env := os.Getenv("ENV")
 
-	if env != "production" {
-		if err := godotenv.Load(".env"); err != nil {
-			logger.Fatal("Error loading .env file")
+	// If the environment is production, we don't need to load the .env file
+	// we assume that the environment variables are already set
+	if env == "production" {
+		return
+	}
+
+	if env == "test" {
+		// for tests, chdir to the project root
+		_, filename, _, _ := runtime.Caller(0)
+		dir := path.Join(path.Dir(filename), "../..")
+
+		if err := os.Chdir(dir); err != nil {
+			panic(err)
 		}
+
+		if err := godotenv.Load(".env"); err != nil {
+			logger.Error("Error loading .env file.", err)
+		}
+
+		return
+	}
+
+	if err := godotenv.Load(".env"); err != nil {
+		logger.Fatal("Error loading .env file")
 	}
 }
 
