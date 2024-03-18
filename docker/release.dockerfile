@@ -1,6 +1,21 @@
 # Start from the latest golang base image
 FROM golang:latest
 
+# Declare build arguments
+ARG ENV
+ARG GIN_MODE
+ARG JWT_SECRET
+ARG JWT_VALIDITY_IN_HOURS
+ARG JWT_ISSUER
+ARG DOMAIN
+ARG AUTH_REDIRECT_URL
+ARG DB_URL
+ARG TEST_DB_URL
+ARG DB_MAX_OPEN_CONNECTIONS
+ARG GOOGLE_CLIENT_ID
+ARG GOOGLE_CLIENT_SECRET
+ARG GOOGLE_REDIRECT_URL
+
 # Install make
 RUN apt-get update && apt-get install -y make
 
@@ -16,27 +31,24 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY . .
 
-# Set the environment variable
-# this is required for prod deployment
-ENV ENV="production"
-# this is require for gin mode to run in release mode
-ENV GIN_MODE="release"
+# Set the environment variables
+ENV ENV=$ENV
+ENV GIN_MODE=$GIN_MODE
 
-ENV JWT_SECRET="secret"
-ENV JWT_VALIDITY_IN_HOURS=24
-ENV JWT_ISSUER="wisee-backend"
+ENV JWT_SECRET=$JWT_SECRET
+ENV JWT_VALIDITY_IN_HOURS=$JWT_VALIDITY_IN_HOURS
+ENV JWT_ISSUER=$JWT_ISSUER
 
-ENV DOMAIN="localhost"
-ENV AUTH_REDIRECT_URL="http://localhost:3000/dashboard"
+ENV DOMAIN=$DOMAIN
+ENV AUTH_REDIRECT_URL=$AUTH_REDIRECT_URL
 
-ENV DB_URL="postgresql://postgres:postgres@host.docker.internal:5432/wisee_core?sslmode=disable"
-ENV TEST_DB_URL="postgresql://postgres:postgres@host.docker.internal:5432/wisee_core_test?sslmode=disable"
-ENV DB_MAX_OPEN_CONNECTIONS=10
+ENV DB_URL=$DB_URL
+ENV TEST_DB_URL=$TEST_DB_URL
+ENV DB_MAX_OPEN_CONNECTIONS=$DB_MAX_OPEN_CONNECTIONS
 
-ENV GOOGLE_CLIENT_ID="google-client-id"
-ENV GOOGLE_CLIENT_SECRET="google-client-secret"
-ENV GOOGLE_REDIRECT_URL="http://localhost:8080/v1/auth/google/callback"
-
+ENV GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+ENV GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+ENV GOOGLE_REDIRECT_URL=$GOOGLE_REDIRECT_URL
 
 # Build the Go app
 RUN make build
