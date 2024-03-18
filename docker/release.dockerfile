@@ -17,8 +17,11 @@ RUN go mod download
 COPY . .
 
 # Set the environment variable
+# this is required for prod deployment
 ENV ENV="production"
+# this is require for gin mode to run in release mode
 ENV GIN_MODE="release"
+
 ENV JWT_SECRET="secret"
 ENV JWT_VALIDITY_IN_HOURS=24
 ENV JWT_ISSUER="wisee-backend"
