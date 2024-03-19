@@ -32,7 +32,7 @@ func loadEnv() {
 
 	// If the environment is production, we don't need to load the .env file
 	// we assume that the environment variables are already set
-	if env == "production" {
+	if env == "production" || env == "staging" {
 		return
 	}
 
