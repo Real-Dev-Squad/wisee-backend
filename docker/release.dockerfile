@@ -1,6 +1,6 @@
 # Create a stage for building the application.
 ARG GO_VERSION=1.21.0
-FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS build
+FROM golang:${GO_VERSION} AS build
 WORKDIR /src
 
 # Install make
@@ -22,7 +22,7 @@ ARG TARGETARCH
 # source code into the container.
 RUN --mount=type=cache,target=/go/pkg/mod/ \
     --mount=type=bind,target=. \
-    GOOS=$BUILDPLATFORM CGO_ENABLED=0 GOARCH=$TARGETARCH go build -o /bin/server ./src
+    GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o /bin/server ./src
 
 ################################################################################
 # Create a new stage for running the application that contains the minimal
