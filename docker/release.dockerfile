@@ -3,9 +3,6 @@ ARG GO_VERSION=1.21.0
 FROM golang:${GO_VERSION} AS build
 WORKDIR /src
 
-# Install make
-# RUN apt-get update && apt-get install -y make
-
 # Download dependencies as a separate step to take advantage of Docker's caching.
 RUN --mount=type=cache,target=/go/pkg/mod/ \
     --mount=type=bind,source=go.sum,target=go.sum \
