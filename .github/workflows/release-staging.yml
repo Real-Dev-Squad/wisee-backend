@@ -1,9 +1,10 @@
-name: Deploy to EC2
+name: Deploy to Staging
 
 on:
   push:
     branches:
-      - main
+      - dev
+      - yash/group
   workflow_dispatch:
 
 jobs:
