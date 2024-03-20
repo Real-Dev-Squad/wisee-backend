@@ -3,6 +3,7 @@ package routes
 import (
 	"net/http"
 
+	"github.com/Real-Dev-Squad/wisee-backend/src/utils/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 )
@@ -17,6 +18,8 @@ func HealthRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
 				"message": "error",
 			})
+
+			logger.Error(err)
 			return
 		}
 
