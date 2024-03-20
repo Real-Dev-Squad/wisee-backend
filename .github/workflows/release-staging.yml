@@ -1,11 +1,11 @@
 name: Deploy to Staging
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - dev
       - yash/group
-  workflow_dispatch:
 
 jobs:
   deploy:
