@@ -10,7 +10,7 @@ import (
 )
 
 var jwtSecret = config.JwtSecret
-var jwtValidityInHours = config.JwtValidityInHours
+var jwtValidityInDays = config.JwtValidityInDays
 
 /*
  * GenerateToken generates a JWT token for the user
@@ -23,7 +23,7 @@ func GenerateToken(user *models.User) (string, error) {
 		"iss":   issuer,
 		"email": user.Email,
 		"iat":   jwt.NewNumericDate(time.Now()),
-		"exp":   jwt.NewNumericDate(time.Now().AddDate(0, 0, jwtValidityInHours)),
+		"exp":   jwt.NewNumericDate(time.Now().AddDate(0, 0, jwtValidityInDays)),
 	})
 
 	token, error := t.SignedString(key)
