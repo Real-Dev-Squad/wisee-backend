@@ -12,6 +12,15 @@ func HealthRoutes(rg *gin.RouterGroup, db *bun.DB) {
 	healthCheck := rg.Group("/health")
 
 	healthCheck.GET("", func(ctx *gin.Context) {
+		// make a call to google.com
+		res, gError := http.Get("https://google.com")
+
+		if gError != nil {
+			logger.Info("Google is down: ", gError)
+		}
+
+		logger.Info("google :", res.Body)
+
 		err := db.Ping()
 
 		if err != nil {
