@@ -13,7 +13,7 @@ import (
 var Env string
 
 var JwtSecret string
-var JwtValidityInHours int
+var JwtValidityInDays int
 var JwtIssuer string
 
 var Domain string
@@ -69,7 +69,7 @@ func init() {
 	}
 
 	JwtSecret = os.Getenv("JWT_SECRET")
-	JwtValidityInHours, _ = strconv.Atoi(os.Getenv("JWT_VALIDITY_IN_HOURS"))
+	JwtValidityInDays, _ = strconv.Atoi(os.Getenv("JWT_VALIDITY_IN_DAYS"))
 	JwtIssuer = os.Getenv("JWT_ISSUER")
 
 	Domain = os.Getenv("DOMAIN")
