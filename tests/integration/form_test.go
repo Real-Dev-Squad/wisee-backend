@@ -29,7 +29,7 @@ func TestFormCreation(t *testing.T) {
 	jsonValue, _ := json.Marshal(requestBody)
 
 	w := httptest.NewRecorder()
-	req, err := http.NewRequest("POST", "/v1/forms", bytes.NewBuffer(jsonValue))
+	req, err := http.NewRequest("POST", "/wisee/v1/forms", bytes.NewBuffer(jsonValue))
 
 	router.ServeHTTP(w, req)
 
@@ -70,7 +70,7 @@ func TestFormCreationNoPerformedById(t *testing.T) {
 	jsonValue, _ := json.Marshal(requestBody)
 
 	w := httptest.NewRecorder()
-	req, err := http.NewRequest("POST", "/v1/forms", bytes.NewBuffer(jsonValue))
+	req, err := http.NewRequest("POST", "/wisee/v1/forms", bytes.NewBuffer(jsonValue))
 
 	router.ServeHTTP(w, req)
 
@@ -95,7 +95,7 @@ func TestFormCreationNoPerformedById(t *testing.T) {
 func TestFormGetAll(t *testing.T) {
 	router := routes.SetupV1Routes(db)
 	w := httptest.NewRecorder()
-	req, err := http.NewRequest("GET", "/v1/forms", nil)
+	req, err := http.NewRequest("GET", "/wisee/v1/forms", nil)
 
 	router.ServeHTTP(w, req)
 
@@ -121,7 +121,7 @@ func TestFormGetAll(t *testing.T) {
 func TestFormGetById(t *testing.T) {
 	router := routes.SetupV1Routes(db)
 	w := httptest.NewRecorder()
-	req, err := http.NewRequest("GET", fmt.Sprintf("/v1/forms/%v", form.Id), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("/wisee/v1/forms/%v", form.Id), nil)
 
 	router.ServeHTTP(w, req)
 	if err != nil {
@@ -150,7 +150,7 @@ func TestFormGetById(t *testing.T) {
 func TestFormGetByInvalidId(t *testing.T) {
 	router := routes.SetupV1Routes(db)
 	w := httptest.NewRecorder()
-	req, err := http.NewRequest("GET", fmt.Sprintf("/v1/forms/%v", 1526), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("/wisee/v1/forms/%v", 1526), nil)
 
 	router.ServeHTTP(w, req)
 	if err != nil {
@@ -187,7 +187,7 @@ func TestFormUpdate(t *testing.T) {
 	jsonValue, _ := json.Marshal(requestBody)
 
 	w := httptest.NewRecorder()
-	req, err := http.NewRequest("PATCH", fmt.Sprintf("/v1/forms/%v", form.Id), bytes.NewBuffer(jsonValue))
+	req, err := http.NewRequest("PATCH", fmt.Sprintf("/wisee/v1/forms/%v", form.Id), bytes.NewBuffer(jsonValue))
 
 	router.ServeHTTP(w, req)
 	if err != nil {
@@ -223,7 +223,7 @@ func TestFormUpdateInavlidStatus(t *testing.T) {
 	jsonValue, _ := json.Marshal(requestBody)
 
 	w := httptest.NewRecorder()
-	req, err := http.NewRequest("PATCH", fmt.Sprintf("/v1/forms/%v", form.Id), bytes.NewBuffer(jsonValue))
+	req, err := http.NewRequest("PATCH", fmt.Sprintf("/wisee/v1/forms/%v", form.Id), bytes.NewBuffer(jsonValue))
 
 	router.ServeHTTP(w, req)
 	if err != nil {
@@ -252,7 +252,7 @@ func TestFormUpdateInavlidFormId(t *testing.T) {
 	jsonValue, _ := json.Marshal(requestBody)
 
 	w := httptest.NewRecorder()
-	req, err := http.NewRequest("PATCH", fmt.Sprintf("/v1/forms/%v", 15668), bytes.NewBuffer(jsonValue))
+	req, err := http.NewRequest("PATCH", fmt.Sprintf("/wisee/v1/forms/%v", 15668), bytes.NewBuffer(jsonValue))
 
 	router.ServeHTTP(w, req)
 	if err != nil {

@@ -12,16 +12,11 @@ func SetupV1Routes(db *bun.DB) *gin.Engine {
 	// TODO: Configure CORS properly to allow only access from certain origins
 	router.Use(cors.Default())
 
-	v1 := router.Group("v1/")
+	v1 := router.Group("wisee/v1/")
 	UserRoutes(v1, db)
 	AuthRoutes(v1, db)
 	FormRoutes(v1, db)
-
-	router.GET("/health", func(ctx *gin.Context) {
-		ctx.JSON(200, gin.H{
-			"message": "OK",
-		})
-	})
+	HealthRoutes(v1, db)
 
 	return router
 }

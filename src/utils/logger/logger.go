@@ -56,7 +56,6 @@ func Warn(v ...interface{}) {
 
 func Error(v ...interface{}) {
 	errorLogger.Println(v...)
-
 }
 
 func Fatal(v ...interface{}) {

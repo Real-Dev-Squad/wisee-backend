@@ -12,7 +12,7 @@ func TestGetUsers(t *testing.T) {
 	router := routes.SetupV1Routes(db)
 
 	w := httptest.NewRecorder()
-	req, err := http.NewRequest("GET", "/v1/users", nil)
+	req, err := http.NewRequest("GET", "/wisee/v1/users", nil)
 
 	router.ServeHTTP(w, req)
 

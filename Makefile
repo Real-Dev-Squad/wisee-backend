@@ -22,7 +22,7 @@ endif
 
 build:
 	@echo "Building $(OS) $(ARCH) binary..."
-	@GOOS=$(OS) GOARCH=$(ARCH) go build $(ARGS) -o "bin/$(BINARY_NAME)" src/main.go
+	@GOOS=$(OS) GOARCH=$(ARCH) CGO_ENABLED=0 go build $(ARGS) -o "bin/$(BINARY_NAME)" ./src
 
 test_unit:
 	@echo "Running tests..."
