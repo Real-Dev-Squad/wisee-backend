@@ -2,33 +2,28 @@ package utils
 
 import (
 	"errors"
-	"os"
-	"strconv"
 	"time"
 
+	"github.com/Real-Dev-Squad/wisee-backend/src/config"
 	"github.com/Real-Dev-Squad/wisee-backend/src/models"
 	"github.com/golang-jwt/jwt/v5"
 )
+
+var jwtSecret = config.JwtSecret
+var jwtValidityInDays = config.JwtValidityInDays
 
 /*
  * GenerateToken generates a JWT token for the user
  */
 func GenerateToken(user *models.User) (string, error) {
-	issuer := os.Getenv("JWT_ISSUER")
-	key := []byte(os.Getenv("JWT_SECRET"))
-
-	tokenValidityInHours, err := strconv.ParseInt(os.Getenv("JWT_VALIDITY_IN_HOURS"), 10, 8)
-
-	if err != nil {
-		return "", err
-	}
-
-	tokenExpiryTime := time.Now().Add(time.Second * time.Duration(tokenValidityInHours)).UTC().Format(time.RFC3339)
+	issuer := config.JwtIssuer
+	key := []byte(jwtSecret)
 
 	t := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
 		"iss":   issuer,
-		"exp":   tokenExpiryTime,
 		"email": user.Email,
+		"iat":   jwt.NewNumericDate(time.Now()),
+		"exp":   jwt.NewNumericDate(time.Now().AddDate(0, 0, jwtValidityInDays)),
 	})
 
 	token, error := t.SignedString(key)
@@ -40,32 +35,36 @@ func GenerateToken(user *models.User) (string, error) {
  * VerifyToken verifies the token and returns the email of the user
  */
 func VerifyToken(tokenString string) (string, error) {
-	var claims jwt.MapClaims = nil
-
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-
+	token, tokenErr := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if token.Method.Alg() != jwt.SigningMethodHS512.Alg() {
 			return nil, jwt.ErrSignatureInvalid
 		}
 
-		return []byte(os.Getenv("JWT_SECRET")), nil
+		return []byte(jwtSecret), nil
 	})
 
-	if c, ok := token.Claims.(jwt.MapClaims); !ok && !token.Valid {
-		return "", err
-	} else {
-		claims = c
+	if tokenErr != nil || !token.Valid {
+		return "", tokenErr
 	}
 
-	expiryTime, err := time.Parse(time.RFC3339, claims["exp"].(string))
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return "", errors.New("token claims are not in expected format")
+	}
 
+	exp, err := claims.GetExpirationTime()
 	if err != nil {
 		return "", err
 	}
 
-	if time.Now().UTC().After(expiryTime) {
+	if exp.Before(time.Now().UTC()) {
 		return "", errors.New("token has expired")
 	}
 
-	return claims["email"].(string), nil
+	email, ok := claims["email"].(string)
+	if !ok {
+		return "", errors.New("email not found in token")
+	}
+
+	return email, nil
 }
