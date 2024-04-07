@@ -4,12 +4,15 @@ import (
 	"os"
 	"testing"
 
+	"github.com/Real-Dev-Squad/wisee-backend/src/config"
 	"github.com/Real-Dev-Squad/wisee-backend/src/models"
 	"github.com/Real-Dev-Squad/wisee-backend/src/utils"
+	"github.com/Real-Dev-Squad/wisee-backend/src/utils/logger"
 )
 
 func TestMain(m *testing.M) {
 	code := m.Run()
+	logger.Info(config.JwtValidityInDays)
 
 	os.Exit(code)
 }
