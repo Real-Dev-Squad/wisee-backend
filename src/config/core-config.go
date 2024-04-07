@@ -13,7 +13,7 @@ import (
 var Env string
 
 var JwtSecret string
-var JwtValidityInHours int
+var JwtValidityInDays int
 var JwtIssuer string
 
 var Domain string
@@ -32,7 +32,7 @@ func loadEnv() {
 
 	// If the environment is production, we don't need to load the .env file
 	// we assume that the environment variables are already set
-	if env == "production" {
+	if env == "production" || env == "staging" {
 		return
 	}
 
@@ -69,7 +69,7 @@ func init() {
 	}
 
 	JwtSecret = os.Getenv("JWT_SECRET")
-	JwtValidityInHours, _ = strconv.Atoi(os.Getenv("JWT_VALIDITY_IN_HOURS"))
+	JwtValidityInDays, _ = strconv.Atoi(os.Getenv("JWT_VALIDITY_IN_DAYS"))
 	JwtIssuer = os.Getenv("JWT_ISSUER")
 
 	Domain = os.Getenv("DOMAIN")

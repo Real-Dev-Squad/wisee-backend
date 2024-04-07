@@ -16,11 +16,13 @@ ifeq ($(ARCH),x86_64)
 	ARCH := amd64
 else ifeq ($(ARCH),i386)
 	ARCH := 386
+else ifeq ($(ARCH),aarch64)
+    ARCH := arm64
 endif
 
 build:
 	@echo "Building $(OS) $(ARCH) binary..."
-	@GOOS=$(OS) GOARCH=$(ARCH) go build $(ARGS) -o "bin/$(BINARY_NAME)" src/main.go
+	@GOOS=$(OS) GOARCH=$(ARCH) CGO_ENABLED=0 go build $(ARGS) -o "bin/$(BINARY_NAME)" ./src
 
 test_unit:
 	@echo "Running tests..."

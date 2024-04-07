@@ -15,5 +15,5 @@ func main() {
 	port := flag.String("port", ":8080", "server address to listen on")
 	flag.Parse()
 
-	routes.Listen("127.0.0.1"+*port, bunDbInstance)
+	routes.Listen("0.0.0.0"+*port, bunDbInstance)
 }
