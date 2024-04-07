@@ -43,5 +43,5 @@ jobs:
             - name: Run Unit tests
               run: make test_unit
 
-            # - name: Run Integration tests
-            #   run: make test_integration
+            - name: Run Integration tests
+              run: make test_integration
