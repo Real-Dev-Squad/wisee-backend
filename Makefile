@@ -74,6 +74,9 @@ migrate-all-down:
 		exit 1; \
 	fi
 
+# Create a new migration file
+# ---
+# Example: make migrate-create name=create_users_table
 migrate-create:
 	@if command -v migrate > /dev/null; then \
 	    migrate create -ext sql -dir database/migrations -seq $(name); \
@@ -82,6 +85,8 @@ migrate-create:
 		exit 1; \
 	fi
 
+# Get the current migration version
+# ---
 migrate-version:
 	@if command -v migrate > /dev/null; then \
 	    migrate -database $(DEV_DATABASE_URL) -path ./database/migrations version; \
@@ -90,6 +95,9 @@ migrate-version:
 		exit 1; \
 	fi
 
+# Set the verion of the migration, without running it
+# ---
+# Example: make migrate-set-version version=1
 migrate-force:
 	@if command -v migrate > /dev/null; then \
 	    migrate -database $(DEV_DATABASE_URL) -path ./database/migrations force $(version); \
