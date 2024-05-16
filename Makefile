@@ -74,7 +74,6 @@ migrate-all-down:
 		exit 1; \
 	fi
 
-# Create a new migration
 migrate-create:
 	@if command -v migrate > /dev/null; then \
 	    migrate create -ext sql -dir database/migrations -seq $(name); \
