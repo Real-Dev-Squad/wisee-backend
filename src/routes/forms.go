@@ -1,10 +1,12 @@
 package routes
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/Real-Dev-Squad/wisee-backend/src/dtos"
 	"github.com/Real-Dev-Squad/wisee-backend/src/models"
+	"github.com/Real-Dev-Squad/wisee-backend/src/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 )
@@ -26,13 +28,46 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			return
 		}
 
+		/**
+		* Stringify the content to generate a hash
+		* ---
+		 */
+		stringifiedJson, marshalErr := json.Marshal(requestBody.Content)
+
+		if marshalErr != nil {
+			errObj := dtos.ResponseDto{
+				Message: "invalid request",
+				Error: &dtos.ErrorResponse{
+					Message: "invalid request body",
+					Detail:  "error reading the content",
+				},
+			}
+
+			ctx.JSON(http.StatusBadRequest, errObj)
+			return
+		}
+
+		shareableId, hashErr := utils.GenerateHash(string(stringifiedJson), 5)
+
+		if hashErr != nil {
+			errObj := dtos.ResponseDto{
+				Message: "invalid request",
+				Error: &dtos.ErrorResponse{
+					Message: "invalid request body",
+					Detail:  "error generating shareable id",
+				},
+			}
+
+			ctx.JSON(http.StatusBadRequest, errObj)
+			return
+		}
+
 		var form = &models.Form{
 			Content:     requestBody.Content,
 			CreatedById: requestBody.PerformedById,
 			Status:      models.DRAFT,
 			OwnerId:     requestBody.PerformedById,
-			// TODO : generate shareable id
-			ShareableId: "123",
+			ShareableId: shareableId,
 		}
 
 		// Create a new form
@@ -73,6 +108,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			OwnerId:     form.OwnerId,
 			CreatedById: form.CreatedById,
 			Status:      string(form.Status),
+			ShareableId: form.ShareableId,
 			CreatedAt:   form.CreatedAt.String(),
 			UpdatedAt:   form.UpdatedAt.String(),
 		}
