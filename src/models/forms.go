@@ -23,6 +23,7 @@ type Form struct {
 	bun.BaseModel `bun:"table:forms.form"`
 
 	Id          int64            `bun:"id,pk,autoincrement" json:"id"`
+	ShareableId string           `bun:"shareable_id" json:"shareable_id"`
 	Content     FormContent      `bun:"content" json:"content"`
 	CreatedById int64            `bun:"created_by_id" json:"created_by_id"`
 	CreatedBy   *User            `bun:"rel:belongs-to,join:created_by_id=id" json:"created_by"`

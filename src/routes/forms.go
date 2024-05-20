@@ -31,8 +31,11 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			CreatedById: requestBody.PerformedById,
 			Status:      models.DRAFT,
 			OwnerId:     requestBody.PerformedById,
+			ShareableId: "123",
 		}
 
+		// Create a new form
+		// ---
 		if _, err := db.NewInsert().Model(form).Exec(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
@@ -49,6 +52,8 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			FormId: form.Id,
 		}
 
+		// Create a new entry using the form created above
+		// ---
 		if _, err := db.NewInsert().Model(FormMetaData).Exec(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
