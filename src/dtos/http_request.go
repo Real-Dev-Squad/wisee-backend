@@ -15,6 +15,5 @@ type UpdateFormRequestDto struct {
 
 type CreateFormSubmissionRequestDto struct {
 	Content      models.FormContent `json:"content"`
-	ResponseById int64              `json:"reponse_by_id"`
-	FormId       int64              `json:"form_id"`
+	ResponseById int64              `json:"response_by_id"`
 }

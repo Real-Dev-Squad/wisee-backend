@@ -24,6 +24,7 @@ type CreateUpdateGetFormResponseDto struct {
 	CreatedById int64              `json:"created_by_id"`
 	Status      string             `json:"status"`
 	UpdatedById *int64             `json:"updated_by_id"`
+	ShareableId string             `json:"shareable_id"`
 	CreatedAt   string             `json:"created_at"`
 	UpdatedAt   string             `json:"updated_at"`
 }
@@ -32,9 +33,9 @@ type GetFormMetaDataResponseDto struct {
 	Id                               int64     `json:"id"`
 	FormId                           int64     `json:"form_id"`
 	IsDeleted                        bool      `json:"is_deleted"`
-	AccepctingResponses              bool      `json:"accepting_responses"`
+	AcceptingResponses               bool      `json:"accepting_responses"`
 	AllowGuestResponses              bool      `json:"allow_guest_responses"`
-	AllowMultipleRepsonses           bool      `json:"allow_multiple_responses"`
+	AllowMultipleResponses           bool      `json:"allow_multiple_responses"`
 	SendConfirmationEmailToRespondee bool      `json:"send_confirmation_email_to_respondee"`
 	SendSubmissionEmailToOwner       bool      `json:"send_submission_email_to_owner"`
 	ValidTill                        time.Time `json:"valid_till"`
@@ -48,6 +49,7 @@ type GetFormsResponseDto []CreateUpdateGetFormResponseDto
 type GetFormDetailResponseDto struct {
 	Id          int64                      `json:"id"`
 	OwnerId     int64                      `json:"owner_id"`
+	ShareableId string                     `json:"shareable_id"`
 	Status      string                     `json:"status"`
 	CreatedById int64                      `json:"created_by_id"`
 	UpdatedById *int64                     `json:"updated_by_id"`
