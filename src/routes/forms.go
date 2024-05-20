@@ -48,6 +48,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			return
 		}
 
+		// create a key from the content and the id of the user who created the form
 		shareableIdKey := string(stringifiedJson) + strconv.FormatInt(requestBody.PerformedById, 10)
 		shareableId, hashErr := utils.GenerateHash(shareableIdKey, 5)
 
