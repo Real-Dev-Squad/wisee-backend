@@ -1,10 +1,13 @@
 package routes
 
 import (
+	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/Real-Dev-Squad/wisee-backend/src/dtos"
 	"github.com/Real-Dev-Squad/wisee-backend/src/models"
+	"github.com/Real-Dev-Squad/wisee-backend/src/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 )
@@ -26,13 +29,52 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			return
 		}
 
+		/**
+		* Stringify the content to generate a hash
+		* ---
+		 */
+		stringifiedJson, marshalErr := json.Marshal(requestBody.Content)
+
+		if marshalErr != nil {
+			errObj := dtos.ResponseDto{
+				Message: "invalid request",
+				Error: &dtos.ErrorResponse{
+					Message: "invalid request body",
+					Detail:  "error reading the content",
+				},
+			}
+
+			ctx.JSON(http.StatusBadRequest, errObj)
+			return
+		}
+
+		// create a key from the content and the id of the user who created the form
+		shareableIdKey := string(stringifiedJson) + strconv.FormatInt(requestBody.PerformedById, 10)
+		shareableId, hashErr := utils.GenerateHash(shareableIdKey, 5)
+
+		if hashErr != nil {
+			errObj := dtos.ResponseDto{
+				Message: "invalid request",
+				Error: &dtos.ErrorResponse{
+					Message: "invalid request body",
+					Detail:  "error generating shareable id",
+				},
+			}
+
+			ctx.JSON(http.StatusBadRequest, errObj)
+			return
+		}
+
 		var form = &models.Form{
 			Content:     requestBody.Content,
 			CreatedById: requestBody.PerformedById,
 			Status:      models.DRAFT,
 			OwnerId:     requestBody.PerformedById,
+			ShareableId: shareableId,
 		}
 
+		// Create a new form
+		// ---
 		if _, err := db.NewInsert().Model(form).Exec(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
@@ -49,6 +91,8 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			FormId: form.Id,
 		}
 
+		// Create a new entry using the form created above
+		// ---
 		if _, err := db.NewInsert().Model(FormMetaData).Exec(ctx); err != nil {
 			errObj := dtos.ResponseDto{
 				Message: "something went wrong",
@@ -67,6 +111,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			OwnerId:     form.OwnerId,
 			CreatedById: form.CreatedById,
 			Status:      string(form.Status),
+			ShareableId: form.ShareableId,
 			CreatedAt:   form.CreatedAt.String(),
 			UpdatedAt:   form.UpdatedAt.String(),
 		}
@@ -143,6 +188,61 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			CreatedAt:   form.CreatedAt.String(),
 			UpdatedAt:   form.UpdatedAt.String(),
 			Content:     form.Content,
+			ShareableId: form.ShareableId,
+			Meta: dtos.GetFormMetaDataResponseDto{
+				Id:                               formMetaData.Id,
+				FormId:                           formMetaData.FormId,
+				IsDeleted:                        formMetaData.IsDeleted,
+				AccepctingResponses:              formMetaData.AccepctingResponses,
+				AllowGuestResponses:              formMetaData.AllowGuestResponses,
+				AllowMultipleRepsonses:           formMetaData.AllowMultipleRepsonses,
+				SendConfirmationEmailToRespondee: formMetaData.SendConfirmationEmailToRespondee,
+				SendSubmissionEmailToOwner:       formMetaData.SendSubmissionEmailToOwner,
+				ValidTill:                        formMetaData.ValidTill,
+				UpdatedById:                      formMetaData.UpdatedById,
+				UpdatedAt:                        formMetaData.UpdatedAt,
+			},
+		}
+
+		var res = dtos.ResponseDto{
+			Message: "form fetched successfully",
+			Data:    resData,
+		}
+
+		ctx.JSON(http.StatusOK, res)
+	})
+
+	forms.GET("/share/:shareableId", func(ctx *gin.Context) {
+		var formMetaData models.FormMetaData
+		var form models.Form
+		shareable_id := ctx.Param("shareableId")
+
+		query := db.NewSelect().Model(&formMetaData).Relation("Form").Where("shareable_id = ?", shareable_id)
+		if err := query.Scan(ctx); err != nil {
+			errObj := dtos.ResponseDto{
+				Message: "something went wrong",
+				Error: &dtos.ErrorResponse{
+					Message: "error fetching form",
+					Detail:  err.Error(),
+				},
+			}
+			ctx.JSON(http.StatusBadRequest, errObj)
+			return
+		}
+
+		form = *formMetaData.Form
+
+		// TODO - @yesyash : trim down the response size (createdAt, updatedAt), we don't need all the fields
+		var resData = dtos.GetFormDetailResponseDto{
+			Id:          form.Id,
+			OwnerId:     form.OwnerId,
+			Status:      string(form.Status),
+			CreatedById: form.CreatedById,
+			UpdatedById: form.UpdatedById,
+			CreatedAt:   form.CreatedAt.String(),
+			UpdatedAt:   form.UpdatedAt.String(),
+			Content:     form.Content,
+			ShareableId: form.ShareableId,
 			Meta: dtos.GetFormMetaDataResponseDto{
 				Id:                               formMetaData.Id,
 				FormId:                           formMetaData.FormId,
