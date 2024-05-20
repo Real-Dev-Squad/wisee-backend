@@ -31,6 +31,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			CreatedById: requestBody.PerformedById,
 			Status:      models.DRAFT,
 			OwnerId:     requestBody.PerformedById,
+			// TODO : generate shareable id
 			ShareableId: "123",
 		}
 
