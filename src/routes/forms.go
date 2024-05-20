@@ -8,6 +8,7 @@ import (
 	"github.com/Real-Dev-Squad/wisee-backend/src/dtos"
 	"github.com/Real-Dev-Squad/wisee-backend/src/models"
 	"github.com/Real-Dev-Squad/wisee-backend/src/utils"
+	"github.com/Real-Dev-Squad/wisee-backend/src/utils/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 )
@@ -193,9 +194,9 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 				Id:                               formMetaData.Id,
 				FormId:                           formMetaData.FormId,
 				IsDeleted:                        formMetaData.IsDeleted,
-				AccepctingResponses:              formMetaData.AccepctingResponses,
+				AcceptingResponses:               formMetaData.AcceptingResponses,
 				AllowGuestResponses:              formMetaData.AllowGuestResponses,
-				AllowMultipleRepsonses:           formMetaData.AllowMultipleRepsonses,
+				AllowMultipleResponses:           formMetaData.AllowMultipleResponses,
 				SendConfirmationEmailToRespondee: formMetaData.SendConfirmationEmailToRespondee,
 				SendSubmissionEmailToOwner:       formMetaData.SendSubmissionEmailToOwner,
 				ValidTill:                        formMetaData.ValidTill,
@@ -247,9 +248,9 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 				Id:                               formMetaData.Id,
 				FormId:                           formMetaData.FormId,
 				IsDeleted:                        formMetaData.IsDeleted,
-				AccepctingResponses:              formMetaData.AccepctingResponses,
+				AcceptingResponses:               formMetaData.AcceptingResponses,
 				AllowGuestResponses:              formMetaData.AllowGuestResponses,
-				AllowMultipleRepsonses:           formMetaData.AllowMultipleRepsonses,
+				AllowMultipleResponses:           formMetaData.AllowMultipleResponses,
 				SendConfirmationEmailToRespondee: formMetaData.SendConfirmationEmailToRespondee,
 				SendSubmissionEmailToOwner:       formMetaData.SendSubmissionEmailToOwner,
 				ValidTill:                        formMetaData.ValidTill,
@@ -338,5 +339,82 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 		}
 
 		ctx.JSON(http.StatusAccepted, resObj)
+	})
+
+	forms.POST("/:shareableId/respond", func(ctx *gin.Context) {
+		shareableId := ctx.Param("shareableId")
+		var requestBody dtos.CreateFormSubmissionRequestDto
+
+		var formData struct {
+			ID                 int64  `bun:"id"`
+			ShareableID        string `bun:"shareable_id"`
+			AcceptingResponses bool   `bun:"accepting_responses"`
+		}
+
+		if err := ctx.ShouldBindJSON(&requestBody); err != nil {
+			errObj := dtos.ResponseDto{
+				Message: "invalid request",
+				Error: &dtos.ErrorResponse{
+					Message: "invalid request body",
+					Detail:  err.Error(),
+				},
+			}
+
+			ctx.JSON(http.StatusBadRequest, errObj)
+			return
+		}
+
+		query := db.NewRaw("SELECT form.id, forms.form.shareable_id, forms.metadata.accepting_responses FROM forms.form JOIN forms.metadata ON form.id = metadata.form_id WHERE form.shareable_id = ?", shareableId)
+
+		if err := query.Scan(ctx, &formData); err != nil {
+			logger.Warn("error fetching form: ", err.Error())
+
+			errObj := dtos.ResponseDto{
+				Message: "something went wrong",
+				Error: &dtos.ErrorResponse{
+					Message: "error fetching form",
+				},
+			}
+
+			ctx.JSON(http.StatusBadRequest, errObj)
+			return
+		}
+
+		if !formData.AcceptingResponses {
+			errObj := dtos.ResponseDto{
+				Message: "invalid request",
+				Error: &dtos.ErrorResponse{
+					Message: "form is not accepting responses",
+				},
+			}
+
+			ctx.JSON(http.StatusBadRequest, errObj)
+			return
+		}
+
+		formResponse := &models.FormResponse{
+			ResponseByID: requestBody.ResponseById,
+			FormID:       formData.ID,
+			Content:      requestBody.Content,
+		}
+
+		// TODO - @yesyash : if multiple responses are not allowed, throw an error if a response already exists from a responseById
+		if _, err := db.NewInsert().Model(formResponse).Exec(ctx); err != nil {
+			errObj := dtos.ResponseDto{
+				Message: "something went wrong",
+				Error: &dtos.ErrorResponse{
+					Message: "error creating form response",
+					Detail:  err.Error(),
+				},
+			}
+			ctx.JSON(http.StatusBadRequest, errObj)
+			return
+		}
+
+		resObj := dtos.ResponseDto{
+			Message: "form response created successfully",
+		}
+
+		ctx.JSON(http.StatusCreated, resObj)
 	})
 }

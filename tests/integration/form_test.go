@@ -295,3 +295,31 @@ func TestFormGetByShareableId(t *testing.T) {
 	assert.Equal(t, string(form.Status), resData.Status)
 	assert.Equal(t, form.ShareableId, resData.ShareableId)
 }
+
+func TestFormAddResponse(t *testing.T) {
+	router := routes.SetupV1Routes(db)
+
+	var requestBody = dtos.CreateFormRequestDto{
+		PerformedById: user.Id,
+		Content:       models.FormContent{"blocks": []models.Block{{ID: "1", Type: "text", Content: "Hello World", GroupId: "1", Meta: nil, Order: 1}}},
+	}
+
+	// Convert requestBody to JSON
+	jsonValue, _ := json.Marshal(requestBody)
+
+	w := httptest.NewRecorder()
+	req, err := http.NewRequest("POST", fmt.Sprintf("/wisee/v1/forms/%v/respond", form.ShareableId), bytes.NewBuffer(jsonValue))
+
+	router.ServeHTTP(w, req)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var respBody TestResponseDto
+	if err := json.NewDecoder(w.Body).Decode(&respBody); err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, http.StatusCreated, w.Code)
+}

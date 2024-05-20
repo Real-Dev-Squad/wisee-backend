@@ -43,9 +43,9 @@ type FormMetaData struct {
 	FormId                           int64     `bun:"form_id" json:"form_id"`
 	Form                             *Form     `bun:"rel:belongs-to,join:form_id=id" json:"form"`
 	IsDeleted                        bool      `bun:"is_deleted,default:false" json:"is_deleted"`
-	AccepctingResponses              bool      `bun:"accepting_responses,default:false" json:"accepting_responses"`
+	AcceptingResponses               bool      `bun:"accepting_responses,default:false" json:"accepting_responses"`
 	AllowGuestResponses              bool      `bun:"allow_guest_responses,default:true" json:"allow_guest_responses"`
-	AllowMultipleRepsonses           bool      `bun:"allow_multiple_responses,default:false" json:"allow_multiple_responses"`
+	AllowMultipleResponses           bool      `bun:"allow_multiple_responses,default:false" json:"allow_multiple_responses"`
 	SendConfirmationEmailToRespondee bool      `bun:"send_confirmation_email_to_respondee,default:false" json:"send_confirmation_email_to_respondee"`
 	SendSubmissionEmailToOwner       bool      `bun:"send_submission_email_to_owner,default:false" json:"send_submission_email_to_owner"`
 	ValidTill                        time.Time `bun:"valid_till" json:"valid_till"`
@@ -58,7 +58,7 @@ type FormMetaData struct {
 }
 
 type FormResponse struct {
-	bun.BaseModel `bun:"table:form.responses"`
+	bun.BaseModel `bun:"table:forms.responses"`
 
 	Id           int64       `bun:"id,pk,autoincrement" json:"id" `
 	ResponseByID int64       `bun:"response_by_id" json:"response_by_id"`
