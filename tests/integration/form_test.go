@@ -267,3 +267,31 @@ func TestFormUpdateInavlidFormId(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Contains(t, respBody.Error.Detail, "no rows in result set")
 }
+
+func TestFormGetByShareableId(t *testing.T) {
+	router := routes.SetupV1Routes(db)
+	w := httptest.NewRecorder()
+	req, err := http.NewRequest("GET", fmt.Sprintf("/wisee/v1/forms/share/%v", form.ShareableId), nil)
+
+	router.ServeHTTP(w, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var respBody TestResponseDto
+	if err := json.NewDecoder(w.Body).Decode(&respBody); err != nil {
+		t.Fatal(err)
+	}
+
+	var resData dtos.GetFormDetailResponseDto
+	if err := json.Unmarshal(respBody.Data, &resData); err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "form fetched successfully", respBody.Message)
+	assert.Equal(t, form.Id, resData.Id)
+	assert.Equal(t, form.OwnerId, resData.OwnerId)
+	assert.Equal(t, string(form.Status), resData.Status)
+	assert.Equal(t, form.ShareableId, resData.ShareableId)
+}
