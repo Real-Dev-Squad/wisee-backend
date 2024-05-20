@@ -49,6 +49,7 @@ type GetFormsResponseDto []CreateUpdateGetFormResponseDto
 type GetFormDetailResponseDto struct {
 	Id          int64                      `json:"id"`
 	OwnerId     int64                      `json:"owner_id"`
+	ShareableId string                     `json:"shareable_id"`
 	Status      string                     `json:"status"`
 	CreatedById int64                      `json:"created_by_id"`
 	UpdatedById *int64                     `json:"updated_by_id"`

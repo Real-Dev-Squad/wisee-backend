@@ -188,6 +188,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			CreatedAt:   form.CreatedAt.String(),
 			UpdatedAt:   form.UpdatedAt.String(),
 			Content:     form.Content,
+			ShareableId: form.ShareableId,
 			Meta: dtos.GetFormMetaDataResponseDto{
 				Id:                               formMetaData.Id,
 				FormId:                           formMetaData.FormId,
@@ -241,6 +242,7 @@ func FormRoutes(rg *gin.RouterGroup, db *bun.DB) {
 			CreatedAt:   form.CreatedAt.String(),
 			UpdatedAt:   form.UpdatedAt.String(),
 			Content:     form.Content,
+			ShareableId: form.ShareableId,
 			Meta: dtos.GetFormMetaDataResponseDto{
 				Id:                               formMetaData.Id,
 				FormId:                           formMetaData.FormId,
